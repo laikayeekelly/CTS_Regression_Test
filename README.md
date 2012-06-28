@@ -39,7 +39,7 @@ The test plan is a XML document that contains some reference identifiers referen
 
 1. For Linux/MacOS, install xsltproc. For WindowsOS, install Saxon.
 
-2. The installation step can be found from the webpage of the specific xslt processor developer
+2. The installation steps can be found from the webpage of the specific xslt processor developer
 
 ### 3.2 Run the regression test plan generating system
 
