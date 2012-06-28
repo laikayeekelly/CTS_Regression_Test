@@ -57,16 +57,17 @@ The test plan is a XML document that contains some reference identifiers referen
 
 5.	Follow the steps for running the CTS Test, except the step for launching and run the cts plan, that is the step which requires the command ‘run cts –plan CTS ’. The command should be changed to ‘run cts –plan (filename of xml doc) ’
 
+
 ## 4. Repository Documents List
 
-1. regression.xsl
+1.  regression.xsl
 
 A xsl document which can be used to generate the regression test plan with the use of a xslt processor and the xml document of the CTS test report.
 
-2. regression_version1.py
+2.  regression_version1.py
 
 A python document which is the source of the version one of the program. For the documentation for this version, please refer to the repository CTS_Regression_Test_Python.
 
-3. regression_version2.py
+3.  regression_version2.py
 
 A python document which is the source of the version two of the program. For the documentation for this version, please refer to the repository CTS_Regression_Test_Python.
