@@ -37,7 +37,7 @@ The test plan is a XML document that contains some reference identifiers referen
 
 ### 3.1 Installing xsltproc or Saxon
 
-1. Install xsltproc is Linux/MacOS is being used, install Saxon is WindowsOS is being used.
+1. Install xsltproc if Linux/MacOS is being used, install Saxon if WindowsOS is being used.
 
 2. The installation step can be found from the webpage of specific xslt processor developer
 
