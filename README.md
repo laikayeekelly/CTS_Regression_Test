@@ -37,13 +37,17 @@ The test plan is a XML document that contains some reference identifiers referen
 
 ### 3.1 Installing xsltproc or Saxon
 
-1. Install xsltproc if Linux/MacOS is being used, install Saxon if WindowsOS is being used.
+1. For Linux/MacOS, install xsltproc. For WindowsOS, install Saxon.
 
-2. The installation step can be found from the webpage of specific xslt processor developer
+2. The installation step can be found from the webpage of the specific xslt processor developer
 
 ### 3.2 Run the regression test plan generating system
 
-1. Run the xslt processor document with the input of the xsl document (regression.xsl) and the xml document of the CTS Report. User should also specify the output file with the use of the command provided by specific xslt processor.
+1. Run the xslt processor to generate the xml document of the regression test plan.
+
+For xsltproc, the command should be 'xsltproc -o (output xml file name) regression.xsl (input xml file name)'
+
+For Saxon on Java platform, the command should be 'java -jar saxon9he.jar -o (output xml file name) regression.xsl (input xml file name)'
 
 ### 3.3 Run CTS Regression Test
 
