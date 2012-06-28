@@ -68,6 +68,6 @@ A xsl document which can be used to generate the regression test plan with the u
 
 A python document which is the source of the version one of the program. For the documentation for this version, please refer to the repository CTS_Regression_Test_Python.
 
-#### 3.  regression_version2.py
+### 3.  regression_version2.py
 
 A python document which is the source of the version two of the program. For the documentation for this version, please refer to the repository CTS_Regression_Test_Python.
