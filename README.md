@@ -29,6 +29,7 @@ Recommended XSLT Processor for WindowsOS : Saxon
 ### 2.3 Output
 
 * Regression Test Plan
+
 The test plan is a XML document that contains some reference identifiers referencing to test package that contains the failed test cases stated in the input CTS report. The file name for the output test plan can be defined by user when a xslt processor is being used.
 
 
