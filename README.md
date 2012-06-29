@@ -78,4 +78,4 @@ A python document which is the source of the version two of the program. For the
 
 ### 4. Project_Plan.md
 
-Describes the aim, scope, schedule, project resources, configuration and change management and quality assurance
+Describes the aim, scope, schedule, project resources, configuration and change management and quality assurance of the whole project
