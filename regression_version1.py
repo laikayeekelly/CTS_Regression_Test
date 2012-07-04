@@ -1,4 +1,4 @@
-# CTS Regression Test Plan Generating System
+# CTS Regression Test Plan Generating System (Version 1)
 # Prepared by Kelly Lai
 
 input = open('testResult.xml', 'r')
@@ -8,7 +8,6 @@ output.write('<TestPlan version="1.0">\n')
 
 line = ''
 package = ''
-xml_text = ''
 start_a_new_package = True  
 
 while not('</TestResult>' in line):
@@ -19,8 +18,7 @@ while not('</TestResult>' in line):
     if ('result="fail"' in line): 
         if (start_a_new_package == True):
             start_a_new_package = False            
-            xml_text = '  <Entry uri="' + package + '"/>\n'
-            output.write(xml_text)
+            output.write('  <Entry uri="' + package + '"/>\n')
                 
     line = input.readline()
 
