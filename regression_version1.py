@@ -1,27 +1,28 @@
 # CTS Regression Test Plan Generating System (Version 1)
 # Prepared by Kelly Lai
 
-input = open('testResult.xml', 'r')
-output = open('ctsRegression.xml', 'w')
-output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-output.write('<TestPlan version="1.0">\n')
+with open('ctsRegression.xml', 'w') as output:
+    with open('testResult.xml', 'r') as input:
 
-line = ''
-package = ''
-start_a_new_package = True  
+        output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+        output.write('<TestPlan version="1.0">\n')
 
-while not('</TestResult>' in line):
-    if ('<TestPackage' in line):
-        package = line.split('"')[3]
-        start_a_new_package = True                 
+        line = ''
+        package = ''
+        inside_a_package = False  
+
+        while not('</TestResult>' in line):
+            if ('<TestPackage' in line):
+                package = line.split('"')[3]
+                inside_a_package = False                 
         
-    if ('result="fail"' in line): 
-        if (start_a_new_package == True):
-            start_a_new_package = False            
-            output.write('  <Entry uri="' + package + '"/>\n')
+            if ('result="fail"' in line): 
+                if (inside_a_package == False):
+                    inside_a_package = True            
+                    output.write('  <Entry uri="' + package + '"/>\n')
                 
-    line = input.readline()
+            line = input.readline()
 
-output.write('</TestPlan>\n')
-input.close()
-output.close()
+        output.write('</TestPlan>\n')
+        input.close()
+        output.close()
