@@ -33,8 +33,7 @@ for chances in range(1, no_of_files+1):
 			print(package_list[i])
 
 
-print package_list		
-print package_chances   
+
 
 
 
