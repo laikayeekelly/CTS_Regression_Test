@@ -47,7 +47,7 @@ The test plan is a XML document that contains some reference identifiers referen
 
 For xsltproc, the command should be 'xsltproc -o (output xml file name) regression.xsl (input xml file name)'
 
-For Saxon on Java platform, the command should be 'java -jar saxon9he.jar -o (output xml file name) regression.xsl (input xml file name)'
+For Saxon on Java platform, the command should be ' java -jar saxon9he.jar -o:(output xml file name) (input xml file name) regression.xsl '
 
 ### 3.3 Run CTS Regression Test
 
