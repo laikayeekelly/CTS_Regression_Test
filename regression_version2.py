@@ -1,4 +1,5 @@
 # CTS Regression Test Plan Generating System (Version 2)
+# (Using the library BeautifulSoup)
 # Prepared by Kelly Lai
 from bs4 import BeautifulSoup
 
