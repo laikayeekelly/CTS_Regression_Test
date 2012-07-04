@@ -1,3 +1,6 @@
+# CTS Regression Test Plan Generating System (Version 2)
+# (Using the library Element Tree)
+# Prepared by Kelly Lai
 from xml.etree.ElementTree import ElementTree
 tree = ElementTree()
 tree.parse("testResult.xml")
