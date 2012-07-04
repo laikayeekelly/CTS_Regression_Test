@@ -10,12 +10,12 @@ output = open('ctsRegression.xml', 'w')
 output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 output.write('<TestPlan version="1.0">\n')
 
-for i in package:
-    testcases = list(i.iter("Test"))
-    for j in testcases:
-	    if(j.attrib["result"]=='fail'):
-            output.write('  <Entry uri="' + i.attrib["appPackageName"] + '"/>\n')
-            break
+for each_package in package:
+	testcases = list(each_package.iter("Test"))
+	for each_testcases in testcases:
+		if(each_testcases.attrib["result"]=='fail'):
+			output.write('  <Entry uri="' + each_package.attrib["appPackageName"] + '"/>\n')
+			break
                
 output.write('</TestPlan>\n')
 output.close()
