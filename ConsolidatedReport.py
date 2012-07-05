@@ -5,7 +5,6 @@ no_of_files = 0
 from xml.etree.ElementTree import ElementTree
 tree = ElementTree()
 
-
 if len(sys.argv) != 3:
     print "usage : python ConsolidatedReport.py [CTS reports folder] [output csv file]"
 
@@ -31,8 +30,6 @@ else :
                             else:
                                 testcase_dict[package_name + ',' + case_name] = 1
 
-
-
     output = open(sys.argv[2], 'w')
 
     for chances in range(1, no_of_files+1):
@@ -49,4 +46,4 @@ else :
 
     output.close()
 
-
+    print str(no_of_files)
