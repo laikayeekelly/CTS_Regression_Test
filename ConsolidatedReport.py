@@ -1,12 +1,12 @@
 import os
 import sys
-testcase_dict = {}
+failcase = {}
 no_of_files = 0
 from xml.etree.ElementTree import ElementTree
 tree = ElementTree()
 
 if len(sys.argv) != 3:
-    print "usage : python ConsolidatedReport.py [CTS reports folder] [output csv file]"
+    print "usage : python ConsolidatedReport.py [reports folder] [output csv]"
 
 elif os.path.exists(sys.argv[1]) == False:
     print "folder doesn't exists"
@@ -25,19 +25,20 @@ else :
                     for each_testcase in testcases:
                         if(each_testcase.attrib["result"]=='fail'):
                             case_name = each_testcase.attrib["name"]
-                            if testcase_dict.has_key(package_name + ',' + case_name):
-                                testcase_dict[package_name + ',' + case_name] += 1
+                            if failcase.has_key(package_name+','+case_name):
+                                failcase[package_name+','+case_name] += 1
                             else:
-                                testcase_dict[package_name + ',' + case_name] = 1
+                                failcase[package_name+','+case_name] = 1
 
     output = open(sys.argv[2], 'w')
 
+    #for chances in range(no_of_files+1, 0, -1): (for reverse order)
     for chances in range(1, no_of_files+1):
         sorted_output = []
-        if chances in testcase_dict.values() :
+        if chances in failcase.values() :
             output.write(str(chances)+'\n')
-            for each_case in testcase_dict:
-                if testcase_dict[each_case] == chances :
+            for each_case in failcase:
+                if failcase[each_case] == chances :
                     sorted_output.append(each_case)
 
             sorted_output = sorted(sorted_output)
@@ -46,4 +47,4 @@ else :
 
     output.close()
 
-    print str(no_of_files)
+    print "Finished!!!"
