@@ -32,13 +32,12 @@ def write_to_output(output_file, failcase, no_of_files):
     for chances in range(no_of_files+1, 0, -1): 
         sorted_output = []
         if chances in failcase.values() :
-            #output.write(str(chances)+'\n')
             for each_case in failcase:
                 if failcase[each_case] == chances :
                     sorted_output.append(each_case)
 
             sorted_output = sorted(sorted_output)
             for each_output in sorted_output:
-                output.write(str(chances)+','+str(no_of_files)+','+each_output+'\n')
-
+                output.write(str(chances)+','+str(no_of_files)+',')
+                output.write(each_output+'\n')
     output.close()
