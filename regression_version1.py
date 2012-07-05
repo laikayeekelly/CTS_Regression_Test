@@ -24,5 +24,4 @@ with open('ctsRegression.xml', 'w') as output:
             line = input.readline()
 
         output.write('</TestPlan>\n')
-        input.close()
-        output.close()
+
