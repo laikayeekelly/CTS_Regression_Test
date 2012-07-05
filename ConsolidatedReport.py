@@ -4,8 +4,6 @@ import sys
 from xml.etree.ElementTree import ElementTree
 import ReportLib
 
-# Main Program followed
-
 failcase = {}
 
 if len(sys.argv) != 3:
@@ -18,5 +16,6 @@ file_list = ReportLib.list_files(sys.argv[1])
 for each_file in file_list:
     failcase = ReportLib.find_fail_case(each_file, failcase)
 ReportLib.write_to_output(sys.argv[2], failcase, len(file_list))
+
 print "Finished!!!"
 
