@@ -4,21 +4,19 @@ from xml.dom.minidom import parse
 def find_parent_list(child):
     parentList = []
     parent = child.parentNode
-    parentList.append(parent.getAttribute("name"))
+    parentList.append(parent)
     while parent.nodeName != 'TestPackage':
         parent = parent.parentNode
-        parentList.append(parent.getAttribute("name"))    
-
-        parentList.reverse()
+        parentList.append(parent)    
 
     return parentList
 
 def combine_elements(list):
     result = ""
     if len(list) != 0 :
-        result = list[0]
-        for i in range(1, len(list)):
-            result = result + '.' + str(list[i])
+        result = list[len(list)-1].getAttribute("name")
+        for i in range(len(list)-2, -1, -1):
+            result = result + '.' + str(list[i].getAttribute("name"))
     return result 
 
 def list_files(folder):
@@ -31,14 +29,13 @@ def list_files(folder):
 
 def find_fail_case(file, failcase): 
     
-    dom = parse(file)
- 
+    dom = parse(file) 
     for node in dom.getElementsByTagName('Test'):
         if node.getAttribute("result") == 'fail':
             case_name = node.getAttribute("name")  
             parent_list = find_parent_list(node)
-            suite_name = combine_elements(parent_list[1:len(parent_list)])
-            package_name = parent_list[0]
+            suite_name = combine_elements(parent_list[0:len(parent_list)-1])
+            package_name = parent_list[len(parent_list)-1].getAttribute("appPackageName")
             if failcase.has_key(package_name+','+suite_name+','+case_name):
                 failcase[package_name+','+suite_name+','+case_name] += 1
             else:
@@ -61,3 +58,10 @@ def write_to_output(output_file, failcase, no_of_files):
                 output.write(str(chances)+','+str(no_of_files)+',')
                 output.write(each_output+'\n')
     output.close()
+
+
+def print_list(list):
+    outputList = []
+    for i in range(0, len(list)):
+        outputList.append(list[i].getAttribute("name"))
+    print outputList
