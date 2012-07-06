@@ -58,10 +58,3 @@ def write_to_output(output_file, failcase, no_of_files):
                 output.write(str(chances)+','+str(no_of_files)+',')
                 output.write(each_output+'\n')
     output.close()
-
-
-def print_list(list):
-    outputList = []
-    for i in range(0, len(list)):
-        outputList.append(list[i].getAttribute("name"))
-    print outputList
