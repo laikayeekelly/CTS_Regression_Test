@@ -7,7 +7,7 @@ import ReportLib
 failcase = {}
 
 if len(sys.argv) != 3:
-    raise NameError("usage : python ConsolidatedReport.py reports_folder output_csv")
+    raise NameError("usage : ConsolidatedReport.py reports_folder output_csv")
 
 if os.path.exists(sys.argv[1]) == False:
     raise NameError("folder doesn't exists")
