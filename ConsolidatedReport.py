@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import sys
-from xml.etree.ElementTree import ElementTree
 import ReportLib
 
 failcase = {}
