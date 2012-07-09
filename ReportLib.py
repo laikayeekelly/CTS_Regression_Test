@@ -1,26 +1,25 @@
 import os
 from xml.etree.ElementTree import ElementTree
+from xml.dom.minidom import parse
 
-def find_parent_List(child, tree):
-    parentList = dict((child, p) for p in tree.getiterator() for child in p)
-    return parentList
 
-def combine_elements(list):
-    result = ""
-    if len(list) != 0 :
-        result = list[len(list)-1]
-        for i in range(len(list)-2, -1, -1):
-            result = result + '.' + str(list[i])
-    return result 
+def buildkey(node):
+    list = []
+    while node.parentNode.nodeName != 'TestResult':
+        list.append(node.getAttribute("name"))
+        node = node.parentNode
+    list.append(node.getAttribute("appPackageName"))
 
-def find_test_suite(testcase, tree):
-    testsuiteList = []
-    parentList = find_parent_List(testcase, tree)
-    parent = parentList[testcase]
-    while parent.tag != 'TestPackage':
-        testsuiteList.append(parent.attrib["name"])
-        parent = parentList[parent] 
-    return combine_elements(testsuiteList)        
+    # reverse the order of elements in the list using pop()
+    result = list.pop() 
+    no_of_elements = len(list)
+    for i in range(0, no_of_elements):
+        if ((i == 0) or (i == no_of_elements-1)):
+            result = result + ',' + str(list.pop())
+        else:
+            result = result + '.' + str(list.pop())
+    return result
+
 
 def list_files(folder):
     file_list = []
@@ -30,37 +29,41 @@ def list_files(folder):
                 file_list.append(os.path.join(r,files))
     return file_list
 
-def find_fail_case(file, failcase): 
-    tree = ElementTree()
-    tree.parse(file)
-    package = tree.findall("TestPackage")
-    for each_package in package:
-        package_name = each_package.attrib["appPackageName"]
-      
-        testcases = list(each_package.iter("Test"))
-        for each_testcase in testcases:
-            if(each_testcase.attrib["result"]=='fail'):
-                case_name = each_testcase.attrib["name"]
-                suite_name = find_test_suite(each_testcase, tree)
-                if failcase.has_key(package_name+','+suite_name+','+case_name):
-                    failcase[package_name+','+suite_name+','+case_name] += 1
-                else:
-                    failcase[package_name+','+suite_name+','+case_name] = 1
 
+def find_fail_case(file, failcase):    
+    dom = parse(file) 
+    for node in dom.getElementsByTagName('Test'):
+        if node.getAttribute("result") == 'fail':
+            key = buildkey(node)
+            if failcase.has_key(key):
+                failcase[key] += 1
+            else:
+                failcase[key] = 1
     return failcase
 
-def write_to_output(output_file, failcase, no_of_files):
-    output = open(output_file, 'w')
 
-    for chances in range(no_of_files+1, 0, -1):
-        sorted_output = []
-        if chances in failcase.values() :
-            for each_case in failcase:
-                if failcase[each_case] == chances :
-                    sorted_output.append(each_case)
+def sort_fail_cases_into_desired_format(failcase, no_of_files):
+    output_string = ""
+    list = []
+    for chances in range(0, no_of_files+1):
+        inner_list = []
+        list.append(inner_list)
 
-            sorted_output = sorted(sorted_output)
-            for each_output in sorted_output:
-                output.write(str(chances)+','+str(no_of_files)+',')
-                output.write(each_output+'\n')
-    output.close()
+    for each_case in failcase:
+        list[failcase[each_case]].append(each_case)
+
+    for i in range(no_of_files, 0, -1):
+        list[i].sort()
+        if len(list[i]) != 0:
+            for each_element in list[i]:
+                output_string = output_string+str(i)+','+str(no_of_files)+','
+                output_string = output_string+each_element+'\n'
+
+    return output_string
+
+
+def write_to_output(output_file_name, failcase, no_of_files):
+    output = sort_fail_cases_into_desired_format(failcase, no_of_files)
+    with open(output_file_name, 'w') as output_file:
+        output_file.write(output)
+    
