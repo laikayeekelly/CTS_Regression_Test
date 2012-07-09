@@ -1,5 +1,4 @@
 import os
-from xml.etree.ElementTree import ElementTree
 from xml.dom.minidom import parse
 
 
