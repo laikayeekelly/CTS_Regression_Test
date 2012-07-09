@@ -30,7 +30,7 @@ def list_files(folder):
     return file_list
 
 
-def find_fail_case(file, failcase):    
+def find_fail_case(file, failcase):
     dom = parse(file) 
     for node in dom.getElementsByTagName('Test'):
         if node.getAttribute("result") == 'fail':
@@ -66,4 +66,4 @@ def write_to_output(output_file_name, failcase, no_of_files):
     output = sort_fail_cases_into_desired_format(failcase, no_of_files)
     with open(output_file_name, 'w') as output_file:
         output_file.write(output)
-    
+
