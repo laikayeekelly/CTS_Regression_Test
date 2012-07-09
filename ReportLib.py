@@ -54,7 +54,7 @@ def sort_fail_cases_into_desired_format(failcase, no_of_files):
 
     for i in range(no_of_files, 0, -1):
         list[i].sort()
-        if len(list[i]) != 0:
+        if list[i]:
             for each_element in list[i]:
                 output_string = output_string+str(i)+','+str(no_of_files)+','
                 output_string = output_string+each_element+'\n'
