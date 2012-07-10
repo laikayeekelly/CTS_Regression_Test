@@ -1,4 +1,4 @@
-## Preformance Evalution of ConsolidatedReport.py
+## Performance Evalution of ConsolidatedReport.py
 
 ## Device info
 * Intel Pentium(R) 4 CPU 3.20 GHz
