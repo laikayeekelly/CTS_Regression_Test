@@ -10,14 +10,14 @@ def buildkey(node):
     list.append(node.getAttribute("appPackageName"))
 
     # reverse the order of elements in the list using pop()
-    result = list.pop() 
+    key = list.pop() 
     no_of_elements = len(list)
     for i in range(0, no_of_elements):
         if ((i == 0) or (i == no_of_elements-1)):
-            result = result + ',' + str(list.pop())
+            key = key + ',' + str(list.pop())
         else:
-            result = result + '.' + str(list.pop())
-    return result
+            key = key + '.' + str(list.pop())
+    return key
 
 
 def list_files(folder):
