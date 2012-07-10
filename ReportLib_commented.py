@@ -10,7 +10,7 @@ def buildkey(node):
     list.append(node.getAttribute("appPackageName"))
 
     # reverse the order of elements in the list using pop()
-    key = list.pop() 
+    key = list.pop()
     no_of_elements = len(list)
     for i in range(0, no_of_elements):
         if ((i == 0) or (i == no_of_elements-1)):
@@ -39,8 +39,8 @@ def find_fail_case(file, failcase):
         if node.getAttribute("result") == 'fail':
             # the key should consist of the test suite and test package name
             key = buildkey(node)
-            if failcase.has_key(key):   
-                failcase[key] += 1    
+            if failcase.has_key(key):
+                failcase[key] += 1
             else:
                 failcase[key] = 1
     return failcase
@@ -54,13 +54,13 @@ def sort_fail_cases_into_desired_format(failcase, no_of_files):
     for chances in range(0, no_of_files+1):
         inner_list = []
         list.append(inner_list)
-    #failed cases with chances of failing x times will put into list[x]
+    # failed cases with chances of failing x times will put into list[x]
     for each_case in failcase:
         list[failcase[each_case]].append(each_case)
 
     for i in range(no_of_files, 0, -1):
         list[i].sort()
-        if list[i]:
+        if list[i]:           # list[i] returns true if the list is not empty
             for each_element in list[i]:
                 output_string = output_string+str(i)+','+str(no_of_files)+','
                 output_string = output_string+each_element+'\n'
