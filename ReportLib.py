@@ -9,8 +9,7 @@ def buildkey(node):
         node = node.parentNode
     list.append(node.getAttribute("appPackageName"))
 
-    # reverse the order of elements in the list using pop()
-    key = list.pop() 
+    key = list.pop()
     no_of_elements = len(list)
     for i in range(0, no_of_elements):
         if ((i == 0) or (i == no_of_elements-1)):
@@ -30,7 +29,7 @@ def list_files(folder):
 
 
 def find_fail_case(file, failcase):
-    dom = parse(file) 
+    dom = parse(file)
     for node in dom.getElementsByTagName('Test'):
         if node.getAttribute("result") == 'fail':
             key = buildkey(node)
