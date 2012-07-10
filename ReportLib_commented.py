@@ -34,7 +34,7 @@ def list_files(folder):
 # Find out all the nodes of the fail test case 
 # and update the dictionary for storing the information of the failed test case
 def find_fail_case(file, failcase):
-    dom = parse(file) 
+    dom = parse(file)
     for node in dom.getElementsByTagName('Test'):
         if node.getAttribute("result") == 'fail':
             # the key should consist of the test suite and test package name
@@ -54,7 +54,7 @@ def sort_fail_cases_into_desired_format(failcase, no_of_files):
     for chances in range(0, no_of_files+1):
         inner_list = []
         list.append(inner_list)
-
+    #failed cases with chances of failing x times will put into list[x]
     for each_case in failcase:
         list[failcase[each_case]].append(each_case)
 
