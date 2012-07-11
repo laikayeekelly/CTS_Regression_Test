@@ -1,13 +1,12 @@
 import os
-from xml.dom.minidom import parse
-
+from lxml import etree
 
 def buildkey(node):
     list = []
-    while node.parentNode.nodeName != 'TestResult':
-        list.append(node.getAttribute("name"))
-        node = node.parentNode
-    list.append(node.getAttribute("appPackageName"))
+    while node.getparent().tag != 'TestResult':
+        list.append(node.values()[0])
+        node = node.getparent()
+    list.append(node.values()[1])
 
     key = list.pop()
     no_of_elements = len(list)
@@ -29,9 +28,9 @@ def list_files(folder):
 
 
 def find_fail_case(file, failcase):
-    dom = parse(file)
-    for node in dom.getElementsByTagName('Test'):
-        if node.getAttribute("result") == 'fail':
+    tree = etree.parse(file)
+    find = etree.XPath("//Test[@result='fail']")
+    for node in find(tree):
             key = buildkey(node)
             if failcase.has_key(key):
                 failcase[key] += 1
