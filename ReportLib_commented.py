@@ -59,8 +59,8 @@ def sort_fail_cases_into_desired_format(failcase, no_of_files):
         list[failcase[each_case]].append(each_case)
 
     for i in range(no_of_files, 0, -1):
-        list[i].sort()
-        if list[i]:           # list[i] returns true if the list is not empty
+        list[i].sort()  # sort the elements in each list in alphabetical order
+        if list[i]:     # list[i] returns true if the list is not empty
             for each_element in list[i]:
                 output_string = output_string+str(i)+','+str(no_of_files)+','
                 output_string = output_string+each_element+'\n'
