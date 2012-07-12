@@ -1,22 +1,7 @@
 import os
-from xml.dom.minidom import parse
-
-
-def buildkey(node):
-    list = []
-    while node.parentNode.nodeName != 'TestResult':
-        list.append(node.getAttribute("name"))
-        node = node.parentNode
-    list.append(node.getAttribute("appPackageName"))
-
-    key = list.pop()
-    no_of_elements = len(list)
-    for i in range(0, no_of_elements):
-        if ((i == 0) or (i == no_of_elements-1)):
-            key = key + ',' + str(list.pop())
-        else:
-            key = key + '.' + str(list.pop())
-    return key
+import operator
+import itertools
+from lxml import etree
 
 
 def list_files(folder):
@@ -29,9 +14,26 @@ def list_files(folder):
 
 
 def find_fail_case(file, failcase):
-    dom = parse(file)
-    for node in dom.getElementsByTagName('Test'):
-        if node.getAttribute("result") == 'fail':
+
+    def buildkey(node):
+        list = []
+        while node.getparent().tag != 'TestResult':
+            list.append(node.values()[0])
+            node = node.getparent()
+        list.append(node.values()[1])
+        list.reverse()
+        key = list[0]
+        if len(list) >= 2:
+            key = key + ',' 
+            key = key + '.'.join(list[1:len(list)-1])
+        key = key + ',' + list[len(list)-1]
+
+        return key
+
+
+    tree = etree.parse(file)
+    find = etree.XPath("//Test[@result='fail']")
+    for node in find(tree):
             key = buildkey(node)
             if failcase.has_key(key):
                 failcase[key] += 1
@@ -39,28 +41,26 @@ def find_fail_case(file, failcase):
                 failcase[key] = 1
     return failcase
 
-
-def sort_fail_cases_into_desired_format(failcase, no_of_files):
-    output_string = ""
-    list = []
-    for chances in range(0, no_of_files+1):
-        inner_list = []
-        list.append(inner_list)
-
-    for each_case in failcase:
-        list[failcase[each_case]].append(each_case)
-
-    for i in range(no_of_files, 0, -1):
-        list[i].sort()
-        if list[i]:
-            for each_element in list[i]:
-                output_string = output_string+str(i)+','+str(no_of_files)+','
-                output_string = output_string+each_element+'\n'
-
-    return output_string
-
-
 def write_to_output(output_file_name, failcase, no_of_files):
+
+    def sort_fail_cases_into_desired_format(failcase, no_of_files):
+
+        output_string = ""
+        groups =[]
+
+        sorted_failcase = sorted(failcase.items(), key=operator.itemgetter(1))
+        for chance, testcases in itertools.groupby(sorted_failcase, lambda x:x[1]):
+            groups.append(list(testcases))
+
+        for i in range(len(groups)-1, -1, -1):
+            groups[i].sort()
+            for j in range(0, len(groups[i])):
+                output_string = output_string + str(groups[i][j][1])+','+ str(no_of_files)+','
+                output_string = output_string + groups[i][j][0]+'\n'
+
+        return output_string
+
+
     output = sort_fail_cases_into_desired_format(failcase, no_of_files)
     with open(output_file_name, 'w') as output_file:
         output_file.write(output)
