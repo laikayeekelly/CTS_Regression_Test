@@ -1,27 +1,8 @@
 import os
-<<<<<<< HEAD
+from re import sub
+from operator import itemgetter
+from itertools import groupby
 from lxml import etree
-
-def buildkey(node):
-    list = []
-    while node.getparent().tag != 'TestResult':
-        list.append(node.values()[0])
-        node = node.getparent()
-    list.append(node.values()[1])
-
-    key = list.pop()
-    no_of_elements = len(list)
-    for i in range(0, no_of_elements):
-        if ((i == 0) or (i == no_of_elements-1)):
-            key = key + ',' + str(list.pop())
-        else:
-            key = key + '.' + str(list.pop())
-    return key
-=======
-import operator
-import itertools
-from lxml import etree
->>>>>>> 882083efb866674f4a3493f2783d9d9a6d25dabd
 
 
 def list_files(folder):
@@ -33,58 +14,65 @@ def list_files(folder):
     return file_list
 
 
-def find_fail_case(file, failcase):
-<<<<<<< HEAD
-=======
+def find_fail_case(file, input_list):
+    
+    failcase = input_list[0]
+    message = input_list[1]
 
     def buildkey(node):
-        list = []
+        key_list = []
         while node.getparent().tag != 'TestResult':
-            list.append(node.values()[0])
+            key_list.append(node.values()[0])
             node = node.getparent()
-        list.append(node.values()[1])
-        list.reverse()
-        key = list[0]
-        if len(list) >= 2:
-            key = key + ',' 
-            key = key + '.'.join(list[1:len(list)-1])
-        key = key + ',' + list[len(list)-1]
+        key_list.append(node.values()[1])
+        key_list.reverse()
+        key = key_list[0]
+        if len(key_list) >= 2:
+            key += '\t' + '.'.join(key_list[1:len(key_list)-1])
+        key = key + '\t' + key_list[len(key_list)-1]
 
         return key
 
 
->>>>>>> 882083efb866674f4a3493f2783d9d9a6d25dabd
     tree = etree.parse(file)
     find = etree.XPath("//Test[@result='fail']")
     for node in find(tree):
-            key = buildkey(node)
-            if failcase.has_key(key):
-                failcase[key] += 1
-            else:
-                failcase[key] = 1
-    return failcase
+        key = buildkey(node)
+        fail_message = sub('\r\n|\r', ' ', node.find("FailedScene").values()[0])
+        if failcase.has_key(key):
+            failcase[key] += 1
+            if fail_message not in message[key]:
+                message[key].append(fail_message)
+        else:
+            failcase[key] = 1
+            message[key] = [fail_message]
 
-def write_to_output(output_file_name, failcase, no_of_files):
+    output_list = [failcase, message]
 
-    def sort_fail_cases_into_desired_format(failcase, no_of_files):
+    return output_list
 
-        output_string = ""
-        groups =[]
+def write_to_output(output_file_name, input_list, no_of_files):
 
-        sorted_failcase = sorted(failcase.items(), key=operator.itemgetter(1))
-        for chance, testcases in itertools.groupby(sorted_failcase, lambda x:x[1]):
-            groups.append(list(testcases))
+    def sort_fail_cases_into_desired_format(input_list, no_of_files):
 
-        for i in range(len(groups)-1, -1, -1):
-            groups[i].sort()
-            for j in range(0, len(groups[i])):
-                output_string = output_string + str(groups[i][j][1])+','+ str(no_of_files)+','
-                output_string = output_string + groups[i][j][0]+'\n'
+        failcase = input_list[0]
+        message = input_list[1]
+        failcase_dict = {}
 
-        return output_string
+        for case, chance in failcase.iteritems():
+            failcase_dict.setdefault(chance, [])
+            failcase_dict[chance].append(case)
+
+        chance_list = reversed(failcase_dict.keys())
+        output_list = [[str(chance)+'\t'+str(no_of_files)+'\t'+ case +'\t'+ \
+        '\t'.join(message[case])+'\n' for case in sorted(failcase_dict[chance])\
+        ] for chance in chance_list]
+        return output_list
 
 
-    output = sort_fail_cases_into_desired_format(failcase, no_of_files)
+    output_list = sort_fail_cases_into_desired_format(input_list, no_of_files)
     with open(output_file_name, 'w') as output_file:
-        output_file.write(output)
+        for chance in output_list:
+            for case in chance:
+                output_file.write(case)
 

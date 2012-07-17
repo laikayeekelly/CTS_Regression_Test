@@ -1,27 +1,11 @@
 import os
-from xml.dom.minidom import parse
+from re import sub
+from operator import itemgetter
+from itertools import groupby
+from lxml import etree
 
-
-def buildkey(node):
-    list = []
-    while node.parentNode.nodeName != 'TestResult':
-        list.append(node.getAttribute("name")) 
-        node = node.parentNode
-    list.append(node.getAttribute("appPackageName"))
-
-    # reverse the order of elements in the list using pop()
-    key = list.pop()
-    no_of_elements = len(list)
-    for i in range(0, no_of_elements):
-        if ((i == 0) or (i == no_of_elements-1)):
-            key = key + ',' + str(list.pop())
-        else:
-            key = key + '.' + str(list.pop())
-    return key
-
-
-# List all the xml documents in the folder requested by user
-# Store all file names in to a list claled file_list
+# This function is used to list all the xml documents in the folder requested by 
+# user and store all file names in to a list variable called file_list
 def list_files(folder):
     file_list = []
     for r,d,f in os.walk(folder):
@@ -31,45 +15,89 @@ def list_files(folder):
     return file_list
 
 
-# Find out all the nodes of the fail test case 
-# and update the dictionary for storing the information of the failed test case
-def find_fail_case(file, failcase):
-    dom = parse(file)
-    for node in dom.getElementsByTagName('Test'):
-        if node.getAttribute("result") == 'fail':
-            # the key should consist of the test suite and test package name
-            key = buildkey(node)
-            if failcase.has_key(key):
-                failcase[key] += 1
-            else:
-                failcase[key] = 1
-    return failcase
+# This function is used to find out all the nodes of the fail test case 
+# and update the variable failcase and message
+def find_fail_case(file, input_list):
+
+    failcase = input_list[0]
+    message = input_list[1]
+
+    # both failcase and message are variables of type dictionary
+    # failcase: key -> name of fail cases  value -> number of failed chances
+    # message : key -> name of fail cases
+    #           value -> list of failure messages for the same failed test case
+
+    # generate the key for updating the variables failcase and message
+    def buildkey(node):
+        key_list = []
+        while node.getparent().tag != 'TestResult':
+            # get the name of the test case and test suite
+            key_list.append(node.values()[0])  
+            node = node.getparent()
+        key_list.append(node.values()[1])   # get the name of the test package
+        key_list.reverse()
+        key = key_list[0]
+        if len(key_list) >= 2:
+            key += '\t' + '.'.join(key_list[1:len(key_list)-1])
+        # combine the test suite name together with the notation '.'
+        key = key + '\t' + key_list[len(key_list)-1]
+
+        return key
 
 
-# Categorize the failed test cases into specific list according to their chances
-# of being failed and sort each list in an alphabetical way
-def sort_fail_cases_into_desired_format(failcase, no_of_files):
-    output_string = ""
-    list = []
-    for chances in range(0, no_of_files+1):
-        inner_list = []
-        list.append(inner_list)
-    # failed cases with chances of failing x times will put into list[x]
-    for each_case in failcase:
-        list[failcase[each_case]].append(each_case)
+    tree = etree.parse(file)
+    #find out all the nodes of the fail test case 
+    find = etree.XPath("//Test[@result='fail']")
+    for node in find(tree):
+        key = buildkey(node)
+        fail_message = sub('\r\n|\r', ' ', node.find("FailedScene").values()[0])
+        #replace the \r\n or \r in the failure messages with a white space
+        if failcase.has_key(key):
+            failcase[key] += 1
+            if fail_message not in message[key]:
+                message[key].append(fail_message)
+        else:
+            failcase[key] = 1
+            message[key] = [fail_message]
 
-    for i in range(no_of_files, 0, -1):
-        list[i].sort()  # sort the elements in each list in alphabetical order
-        if list[i]:     # list[i] returns true if the list is not empty
-            for each_element in list[i]:
-                output_string = output_string+str(i)+','+str(no_of_files)+','
-                output_string = output_string+each_element+'\n'
+    output_list = [failcase, message]
 
-    return output_string
+    return output_list
 
-# Output the report as an csv document
-def write_to_output(output_file_name, failcase, no_of_files):
-    output = sort_fail_cases_into_desired_format(failcase, no_of_files)
+def write_to_output(output_file_name, input_list, no_of_files):
+
+    # Categorize the failed test cases into a dictionary according to their 
+    # fail chance and sort the test cases in an alphabetical way
+    def sort_fail_cases_into_desired_format(input_list, no_of_files):
+
+        failcase = input_list[0]
+        message = input_list[1]
+        failcase_dict = {}
+
+        for case, chance in failcase.iteritems():
+            failcase_dict.setdefault(chance, [])
+            failcase_dict[chance].append(case)
+
+        # failcase_dict is a variable of type dictionary
+        # failcase_dict : key -> failed chances   value : list of fail case name
+
+        #Test cases will the most failed chances will be printed out first
+        chance_list = reversed(failcase_dict.keys())
+
+        # For every test cases, print it out in the desire format
+        # Testcases with same failed chances will be put into the same list
+        # And all these lists will be put into a list variable output_list
+        # So, output_list is a variable of type list of lists
+        output_list = [[str(chance)+'\t'+str(no_of_files)+'\t'+ case +'\t'+ \
+        '\t'.join(message[case])+'\n' for case in sorted(failcase_dict[chance])\
+        ] for chance in chance_list]
+
+        return output_list
+
+    # Output the report as an csv document
+    output_list = sort_fail_cases_into_desired_format(input_list, no_of_files)
     with open(output_file_name, 'w') as output_file:
-        output_file.write(output)
+        for chance in output_list:
+            for case in chance:
+                output_file.write(case)
 
