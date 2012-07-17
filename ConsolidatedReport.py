@@ -3,7 +3,8 @@ import os
 import sys
 import ReportLib
 
-failcase = {}
+failcase = [{},{}]
+
 
 if len(sys.argv) != 3:
     raise NameError("usage : ConsolidatedReport.py reports_folder output_csv")
