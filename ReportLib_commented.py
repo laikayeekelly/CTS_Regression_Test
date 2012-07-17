@@ -89,9 +89,13 @@ def write_to_output(output_file_name, input_list, no_of_files):
         # And all these lists will be put into a list variable output_list
         # So, output_list is a variable of type list of lists
         # (List Comprehesion is being used below)
+
         output_list = [[str(chance)+'\t'+str(no_of_files)+'\t'+ case +'\t'+ \
         '\t'.join(message[case])+'\n' for case in sorted(failcase_dict[chance])\
         ] for chance in chance_list]
+        
+        # (python built-in function map cannot be used here due the limitation of
+        # the input arguments)
 
         return output_list
 
