@@ -2,9 +2,10 @@
 # Prepared by Kelly Lai
 from lxml import etree
 
-prev_package_name = ''
-
 with open('ctsRegression.xml', 'w') as output:
+
+    prev_package_name = ''
+
     output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     output.write('<TestPlan version="1.0">\n')
 
