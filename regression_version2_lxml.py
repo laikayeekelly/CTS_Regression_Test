@@ -1,4 +1,5 @@
-# CTS Regression Test Plan Generating System
+# CTS Regression Test Plan Generating System (Version 2)
+# (Using the library lxml)
 # Prepared by Kelly Lai
 from lxml import etree
 
