@@ -22,9 +22,9 @@ def find_fail_case(file, input_list):
     def buildkey(node):
         key_list = []
         while node.getparent().tag != 'TestResult':
-            key_list.append(node.values()[0])
+            key_list.append(node.get("name"))
             node = node.getparent()
-        key_list.append(node.values()[1])
+        key_list.append(node.get("appPackageName"))
         key_list.reverse()
         key = key_list[0]
         if len(key_list) >= 2:
@@ -38,7 +38,10 @@ def find_fail_case(file, input_list):
     find = etree.XPath("//Test[@result='fail']")
     for node in find(tree):
         key = buildkey(node)
-        fail_message = sub('\r\n|\r', ' ', node.find("FailedScene").values()[0])
+        if node.find("FailedScene") != None:
+            fail_message = sub('\r\n|\r', ' ', node.find("FailedScene").get("message").encode('ascii', 'ignore'))
+        else:
+            fail_message = ' '
         if failcase.has_key(key):
             failcase[key] += 1
             if fail_message not in message[key]:
