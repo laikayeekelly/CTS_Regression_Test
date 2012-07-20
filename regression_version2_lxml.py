@@ -1,6 +1,9 @@
+#!/usr/bin/env python
+
 # CTS Regression Test Plan Generating System (Version 2)
 # (Using the library lxml)
 # Prepared by Kelly Lai
+
 from lxml import etree
 
 with open('ctsRegression.xml', 'w') as output:
@@ -15,7 +18,7 @@ with open('ctsRegression.xml', 'w') as output:
     for node in find(tree):
         while node.getparent().tag != 'TestResult':
             node = node.getparent()
-        new_package_name = node.values()[1]
+        new_package_name = node.get("appPackageName")
         if new_package_name != prev_package_name: 
             prev_package_name = new_package_name
             xml_text = '  <Entry uri="' + str(new_package_name) + '"/>\n'
