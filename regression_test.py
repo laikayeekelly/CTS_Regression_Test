@@ -5,6 +5,8 @@ import subprocess
 import regressionLib
 from time import sleep
 
+# This executable python file should be put in the folder android-cts/tools
+
 report_file_list =[]
 
 #subprocess.call( ["cts-tradefed"])
