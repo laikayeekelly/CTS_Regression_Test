@@ -13,7 +13,7 @@ report_file_list =[]
 regression_done = 0
 (report_file_list, fail) = regressionLib.generate_regression_plan(report_file_list)
 
-while (regression_done != 5) and (fail):
+while (regression_done != 10) and (fail):
     print 'run regression test\n'
     #subprocess.call( ["cts-tradefed"])
     #subprocess.call( ["run", "cts", "--plan", "regressionCTS"])
