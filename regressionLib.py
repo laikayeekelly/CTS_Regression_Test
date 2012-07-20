@@ -4,7 +4,7 @@ import ReportLib
 from lxml import etree
 
 
-def generate_regression_plan():
+def generate_regression_plan(report_file_list):
 
     def get_latest_result():
         folder = "../repository/result" 
@@ -18,12 +18,14 @@ def generate_regression_plan():
                     if mtime > latest_time:
                         last_modified_file = filepath
                         latest_time = mtime
-        #print last_modified_file
+
         return last_modified_file
 
 
     file = get_latest_result()
+    report_file_list.append(file)
     fail_found = False
+
     with open('ctsRegression.xml', 'w') as output:
         prev_package_name = ''
 
@@ -31,7 +33,6 @@ def generate_regression_plan():
         output.write('<TestPlan version="1.0">\n')
 
         tree = etree.parse(file)
-
         find = etree.XPath("//Test[@result='fail']")
         for node in find(tree):
             while node.getparent().tag != 'TestResult':
@@ -45,18 +46,16 @@ def generate_regression_plan():
 
         output.write('</TestPlan>\n')
 
-
     print "finished generating regression test plan"
-    return fail_found
+    return (report_file_list, fail_found)
 
 
-def generate_consolidated_report(report_path):
+def generate_consolidated_report(report_path, file_list):
 
-    print "Generating Consolidated Report\n"
+    print "\nGenerating Consolidated Report\n"
 
     failcase = [{},{}]
 
-    file_list = ReportLib.list_files("../repository/result")
     for each_file in file_list:
         failcase = ReportLib.find_fail_case(each_file, failcase)
         print "Finished processing file " + each_file
