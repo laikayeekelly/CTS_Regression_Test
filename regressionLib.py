@@ -7,7 +7,7 @@ from lxml import etree
 def generate_regression_plan():
 
     def get_latest_result():
-        folder = "../repository/results" 
+        folder = "../repository/result" 
         last_modified_file = ""
         latest_time = 0
         for r,d,f in os.walk(folder):
@@ -18,7 +18,7 @@ def generate_regression_plan():
                     if mtime > latest_time:
                         last_modified_file = filepath
                         latest_time = mtime
-        print last_modified_file
+        #print last_modified_file
         return last_modified_file
 
 
@@ -36,7 +36,7 @@ def generate_regression_plan():
         for node in find(tree):
             while node.getparent().tag != 'TestResult':
                 node = node.getparent()
-            new_package_name = node.values()[1]
+            new_package_name = node.get("appPackageName")
             if new_package_name != prev_package_name: 
                 prev_package_name = new_package_name
                 xml_text = '  <Entry uri="' + new_package_name + '"/>\n'
@@ -52,9 +52,11 @@ def generate_regression_plan():
 
 def generate_consolidated_report(report_path):
 
+    print "Generating Consolidated Report\n"
+
     failcase = [{},{}]
 
-    file_list = ReportLib.list_files("../repository/results")
+    file_list = ReportLib.list_files("../repository/result")
     for each_file in file_list:
         failcase = ReportLib.find_fail_case(each_file, failcase)
         print "Finished processing file " + each_file
