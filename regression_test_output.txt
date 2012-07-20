@@ -29,6 +29,7 @@ finished generating regression test plan
 run regression test
 
 finished generating regression test plan
+
 Generating Consolidated Report
 
 Finished processing file ../repository/result\2012.06.25_11.23.18\testResult.xml
