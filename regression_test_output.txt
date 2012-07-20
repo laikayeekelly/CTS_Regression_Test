@@ -1,0 +1,44 @@
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+run regression test
+
+finished generating regression test plan
+Generating Consolidated Report
+
+Finished processing file ../repository/result\2012.06.25_11.23.18\testResult.xml
+Finished processing file ../repository/result\2012.06.26_11.37.01\testResult.xml
+Finished processing file ../repository/result\2012.06.26_18.00.04\testResult.xml
+Finished processing file ../repository/result\2012.06.27_11.14.07\testResult.xml
+Finished processing file ../repository/result\2012.06.28_11.55.56\testResult.xml
+Finished processing file ../repository/result\2012.06.28_17.36.57\testResult.xml
+Finished processing file ../repository/result\2012.06.28_17.45.21\testResult.xml
+Finished processing file ../repository/result\2012.06.29_11.06.25\testResult.xml
+Finished processing file ../repository/result\2012.06.29_11.13.46\testResult.xml
+Finished processing file ../repository/result\2012.06.29_18.05.04\testResult.xml
+Finished!!!
