@@ -7,7 +7,10 @@ from time import sleep
 
 # This executable python file should be put in the folder android-cts/tools
 
-report_file_list =[]
+report_file_list = []
+
+if len(sys.argv) != 2:
+    raise NameError("usage: regression.py output_csv")
 
 #subprocess.call( ["cts-tradefed"])
 #subprocess.call( ["run", "cts", "--plan", "CTS"])
