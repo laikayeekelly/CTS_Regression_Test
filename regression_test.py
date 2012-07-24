@@ -10,7 +10,7 @@ from time import sleep
 def run_test(plan_name, report_file_list) : 
     #subprocess.call( ["cts-tradefed"])
     #subprocess.call( ["run", "cts", "--plan", plan_name])
-    subprocess.call( ["./helloworld.py"] )
+    subprocess.call( ["./helloworld"] )
     report_file_list, fail = regressionLib.generate_regression_plan(report_file_list)
     return (report_file_list, fail)
 
@@ -24,7 +24,6 @@ regression_done = 0
 no_of_regression = int(sys.argv[1])
 
 report_file_list, fail = run_test("CTS", report_file_list)
-
 while (regression_done != no_of_regression) and (fail):
     print 'run regression test\n'
     report_file_list, fail = run_test("regressionCTS", report_file_list) 
