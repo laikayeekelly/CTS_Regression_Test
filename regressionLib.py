@@ -1,8 +1,15 @@
 import os
 import sys
+import subprocess
 import ReportLib
 from lxml import etree
 
+def run_test(plan_name, report_file_list) : 
+    #subprocess.call( ["cts-tradefed"])
+    #subprocess.call( ["run", "cts", "--plan", plan_name])
+    #subprocess.call( ["./helloworld"] )
+    report_file_list, fail = generate_regression_plan(report_file_list)
+    return (report_file_list, fail)
 
 def generate_regression_plan(report_file_list):
 
