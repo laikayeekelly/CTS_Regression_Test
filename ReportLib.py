@@ -14,10 +14,7 @@ def list_files(folder):
     return file_list
 
 
-def find_fail_case(file, input_list):
-    
-    failcase = input_list[0]
-    message = input_list[1]
+def find_fail_case(file, failcase, message):
 
     def buildkey(node):
         key_list = []
@@ -50,16 +47,13 @@ def find_fail_case(file, input_list):
             failcase[key] = 1
             message[key] = [fail_message]
 
-    output_list = [failcase, message]
+    return (failcase, message)
 
-    return output_list
 
-def write_to_output(output_file_name, input_list, no_of_files):
+def write_to_output(output_file_name, failcase, message, no_of_files):
 
-    def sort_fail_cases_into_desired_format(input_list, no_of_files):
+    def sort_fail_cases_into_desired_format(failcase, message, no_of_files):
 
-        failcase = input_list[0]
-        message = input_list[1]
         failcase_dict = {}
 
         for case, chance in failcase.iteritems():
@@ -73,7 +67,7 @@ def write_to_output(output_file_name, input_list, no_of_files):
         return output_list
 
 
-    output_list = sort_fail_cases_into_desired_format(input_list, no_of_files)
+    output_list = sort_fail_cases_into_desired_format(failcase, message, no_of_files)
     with open(output_file_name, 'w') as output_file:
         for chance in output_list:
             for case in chance:
