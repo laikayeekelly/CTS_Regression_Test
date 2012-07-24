@@ -26,7 +26,7 @@ def generate_regression_plan(report_file_list):
     report_file_list.append(file)
     fail_found = False
 
-    with open('ctsRegression.xml', 'w') as output:
+    with open('../repository/plan/ctsRegression.xml', 'w') as output:
         prev_package_name = ''
 
         output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
@@ -54,10 +54,11 @@ def generate_consolidated_report(report_path, file_list):
 
     print "\nGenerating Consolidated Report\n"
 
-    failcase = [{},{}]
+    failcase = {}
+    message = {}
 
     for each_file in file_list:
-        failcase = ReportLib.find_fail_case(each_file, failcase)
+        failcase, message = ReportLib.find_fail_case(each_file, failcase, message)
         print "Finished processing file " + each_file
-    ReportLib.write_to_output(report_path, failcase, len(file_list))
+    ReportLib.write_to_output(report_path, failcase, message, len(file_list))
 
