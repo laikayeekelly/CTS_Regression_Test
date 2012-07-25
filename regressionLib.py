@@ -5,57 +5,59 @@ import ReportLib
 from lxml import etree
 
 def run_test(plan_name, report_file_list) : 
+
+
+    def generate_regression_plan(report_file_list):
+
+        def get_latest_result():
+            folder = "../repository/results" 
+            last_modified_file = ""
+            latest_time = 0
+            for r,d,f in os.walk(folder):
+                for files in f:
+                    if files.endswith(".xml"):
+                        filepath = os.path.join(r,files)
+                        mtime = os.stat(filepath).st_mtime
+                        if mtime > latest_time:
+                            last_modified_file = filepath
+                            latest_time = mtime
+
+            return last_modified_file
+
+
+        file = get_latest_result()
+        report_file_list.append(file)
+        fail_found = False
+
+        with open('../repository/plan/ctsRegression.xml', 'w') as output:
+            prev_package_name = ''
+
+            output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+            output.write('<TestPlan version="1.0">\n')
+
+            tree = etree.parse(file)
+            find = etree.XPath("//Test[@result='fail']")
+            for node in find(tree):
+                while node.getparent().tag != 'TestResult':
+                    node = node.getparent()
+                new_package_name = node.get("appPackageName")
+                if new_package_name != prev_package_name: 
+                    prev_package_name = new_package_name
+                    xml_text = '  <Entry uri="' + new_package_name + '"/>\n'
+                    output.write(xml_text)
+                    fail_found = True
+
+            output.write('</TestPlan>\n')
+
+        print "finished generating regression test plan"
+        return (report_file_list, fail_found)
+
+
     #subprocess.call( ["cts-tradefed"])
     #subprocess.call( ["run", "cts", "--plan", plan_name])
-    subprocess.call( ["./helloworld"] )
+    #subprocess.call( ["./helloworld"] )
     report_file_list, fail = generate_regression_plan(report_file_list)
     return (report_file_list, fail)
-
-def generate_regression_plan(report_file_list):
-
-    def get_latest_result():
-        folder = "../repository/result" 
-        last_modified_file = ""
-        latest_time = 0
-        for r,d,f in os.walk(folder):
-            for files in f:
-                if files.endswith(".xml"):
-                    filepath = os.path.join(r,files)
-                    mtime = os.stat(filepath).st_mtime
-                    if mtime > latest_time:
-                        last_modified_file = filepath
-                        latest_time = mtime
-
-        return last_modified_file
-
-
-    file = get_latest_result()
-    report_file_list.append(file)
-    fail_found = False
-
-    with open('../repository/plan/ctsRegression.xml', 'w') as output:
-        prev_package_name = ''
-
-        output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-        output.write('<TestPlan version="1.0">\n')
-
-        tree = etree.parse(file)
-        find = etree.XPath("//Test[@result='fail']")
-        for node in find(tree):
-            while node.getparent().tag != 'TestResult':
-                node = node.getparent()
-            new_package_name = node.get("appPackageName")
-            if new_package_name != prev_package_name: 
-                prev_package_name = new_package_name
-                xml_text = '  <Entry uri="' + new_package_name + '"/>\n'
-                output.write(xml_text)
-                fail_found = True
-
-        output.write('</TestPlan>\n')
-
-    print "finished generating regression test plan"
-    return (report_file_list, fail_found)
-
 
 def generate_consolidated_report(report_path, file_list):
 

@@ -20,6 +20,8 @@ while (regression_done != no_of_regression) and (fail):
     report_file_list, fail = regressionLib.run_test("regressionCTS", report_file_list) 
     regression_done += 1
 
+print "report_file_list: " 
+print report_file_list
 regressionLib.generate_consolidated_report(sys.argv[2], report_file_list)
 
 print "Finished!!!"
