@@ -3,8 +3,6 @@ import sys
 import subprocess
 from lxml import etree
 from re import sub
-from operator import itemgetter
-from itertools import groupby
 
 report_folder_path = "../repository/results" 
 regression_plan_file_path = "../repository/plan/ctsRegression.xml"
@@ -99,7 +97,7 @@ def generate_consolidated_report(output_file_path, file_list):
         return (failcase, message)
 
 
-    def write_to_output(output_file_path failcase, message, no_of_files):
+    def write_to_output(output_file_path, failcase, message, no_of_files):
 
         def sort_fail_cases_into_desired_format(failcase, message, no_of_files):
 
@@ -117,7 +115,7 @@ def generate_consolidated_report(output_file_path, file_list):
 
 
         output_list = sort_fail_cases_into_desired_format(failcase, message, no_of_files)
-        with open(output_file_path 'w') as output_file:
+        with open(output_file_path, 'w') as output_file:
             for chance in output_list:
                 for case in chance:
                     output_file.write(case)
