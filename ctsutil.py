@@ -11,10 +11,10 @@ regression_plan_file_path = "../repository/plan/ctsRegression.xml"
 tool_to_run_cts = "cts-tradefed"
 
 def run_test(plan_name = 'CTS'): 
-    print 'running test\n'
     #subprocess.call( [tool_to_run_cts])
     #subprocess.call( ["run", "cts", "--plan", plan_name])
     #subprocess.call( ["./helloworld"])
+    print "finish running test"
 
 def generate_regression_plan():
 
@@ -57,7 +57,6 @@ def generate_regression_plan():
 
         output.write('</TestPlan>\n')
 
-    print "finished generating regression test plan"
     return (report_file, fail_found)
 
 
