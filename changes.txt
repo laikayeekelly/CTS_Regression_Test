@@ -1,0 +1,31 @@
+overall changes
+
+deleted ReportLib.py, put those function in ReportLib.py into ctsutil.py
+
+
+ctsutil.py
+
+split the function run_test() into 2 functions run_test() and generate_regression_plan()
+
+line 7 to 9    global variables added
+
+line 75    key = key + ...    ->    key += ...
+
+line 84    'failedScene_node' added
+
+line 111 to 113    indentation changed
+
+
+regression_test.py
+
+line 6    used from and import rather than import only
+
+line 20 and 25    report_file is appened to the list outside the function 
+
+
+Changes cannot be made
+
+ctsutil.py
+
+line 86    ' encode('ascii', 'ignore') '  cannot be deleted, or else UnicodeEncodeError will be raised. 
+(Reason :  The unicode characters cannot be printed out, so have to encode the unicode string as ascii first, whenever those characters are met, skip those characters)
