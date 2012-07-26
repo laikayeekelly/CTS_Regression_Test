@@ -20,7 +20,7 @@ run_test()
 report_file, fail = generate_regression_plan()
 report_file_list.append(report_file)
 while (regression_done != no_of_regression) and (fail):
-    #print 'run regression test\n'
+    print 'Finished generating regression test plan and start running regression test\n'
     run_test("regressionCTS") 
     report_file, fail = generate_regression_plan()
     report_file_list.append(report_file)
