@@ -4,7 +4,7 @@ import subprocess
 from lxml import etree
 from re import sub
 
-report_folder_path = "../repository/results" 
+result_folder_path = "../repository/results" 
 regression_plan_file_path = "../repository/plan/ctsRegression.xml"
 tool_to_run_cts = "cts-tradefed"
 
@@ -17,17 +17,17 @@ def run_test(plan_name = 'CTS'):
 def generate_regression_plan():
 
     def get_latest_result():
-        folder = report_folder_path
+        folder = result_folder_path
         last_modified_file = ""
-        latest_time = 0
+        latest_modified_time = 0
         for r,d,f in os.walk(folder):
             for files in f:
                 if files.endswith(".xml"):
                     filepath = os.path.join(r,files)
-                    mtime = os.stat(filepath).st_mtime
-                    if mtime > latest_time:
+                    modified_time = os.stat(filepath).st_mtime
+                    if modified_time > latest_modified_time:
                         last_modified_file = filepath
-                        latest_time = mtime
+                        latest_modified_time = modified_time
 
         return last_modified_file
 
