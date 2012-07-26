@@ -60,7 +60,7 @@ def generate_regression_plan():
     return (report_file, fail_found)
 
 
-def generate_consolidated_report(report_path, file_list):
+def generate_consolidated_report(output_file_path, file_list):
 
     def find_fail_case(file, failcase, message):
 
@@ -99,7 +99,7 @@ def generate_consolidated_report(report_path, file_list):
         return (failcase, message)
 
 
-    def write_to_output(output_file_name, failcase, message, no_of_files):
+    def write_to_output(output_file_path failcase, message, no_of_files):
 
         def sort_fail_cases_into_desired_format(failcase, message, no_of_files):
 
@@ -117,7 +117,7 @@ def generate_consolidated_report(report_path, file_list):
 
 
         output_list = sort_fail_cases_into_desired_format(failcase, message, no_of_files)
-        with open(output_file_name, 'w') as output_file:
+        with open(output_file_path 'w') as output_file:
             for chance in output_list:
                 for case in chance:
                     output_file.write(case)
@@ -131,5 +131,5 @@ def generate_consolidated_report(report_path, file_list):
     for each_file in file_list:
         failcase, message = find_fail_case(each_file, failcase, message)
         print "Finished processing file " + each_file
-    write_to_output(report_path, failcase, message, len(file_list))
+    write_to_output(output_file_path, failcase, message, len(file_list))
 
