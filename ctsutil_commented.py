@@ -4,16 +4,15 @@ import subprocess
 from lxml import etree
 from re import sub
 
-result_folder_path = "../repository/results" 
+result_folder_path = "../repository/results"
 regression_plan_file_path = "../repository/plan/ctsRegression.xml"
-tool_to_run_cts = "cts-tradefed"
+tool_to_run_cts = "./cts-tradefed"
 
-def run_test(plan_name = 'CTS'): 
+def run_test(plan_name = 'CTS'):
     """ Run the CTS or CTS regression test
         Return the path of the test result report """
 
-    #subprocess.call( [tool_to_run_cts])
-    #subprocess.call( ["run", "cts", "--plan", plan_name])
+    #subprocess.call( [tool_to_run_cts, "run", "cts", "--plan", plan_name])
     #subprocess.call( ["./helloworld"])
     print "finish running test"
 
@@ -22,7 +21,7 @@ def run_test(plan_name = 'CTS'):
     # Get all the test result report and store it in the list file_list
     file_list = sum(file_list, [])
     # Convert the type of file_list from list of lists to list
-    file_list.sort(key=lambda x: os.path.getmtime(x)) 
+    file_list.sort(key=lambda x: os.path.getmtime(x))
     # Sort file_list according to the modidication date of file
     last_modified_file = file_list[len(file_list)-1]
 
