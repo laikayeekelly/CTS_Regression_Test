@@ -16,7 +16,7 @@ def run_test(plan_name = 'CTS'):
     file_list = [[os.path.join(r,files) for files in f if files.endswith(".xml")]
                 for r,d,f in os.walk(result_folder_path)]
     file_list = sum(file_list, [])
-    file_list.sort(key=lambda x: os.path.getmtime(x)) 
+    file_list.sort(key=lambda x: os.path.getmtime(x))
     last_modified_file = file_list[len(file_list)-1]
 
     return last_modified_file
@@ -109,7 +109,7 @@ def generate_consolidated_report(output_file_path, file_list):
 
         with open(output_file_path, 'w') as output_file:
             for output_list_item in group_failcase(failcase, message, no_of_files):
-                    output_file.write(output_list_item)
+                output_file.write(output_list_item)
 
 
     print "\nGenerating Consolidated Report\n"
