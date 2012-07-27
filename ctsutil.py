@@ -14,7 +14,7 @@ def run_test(plan_name = 'CTS'):
     #subprocess.call( ["./helloworld"])
     print "finish running test"
 
-    file_list = [[os.path.join(r,files) for files in f if files.endswith(".xml")] 
+    file_list = [[os.path.join(r,files) for files in f if files.endswith(".xml")]
                 for r,d,f in os.walk(result_folder_path)]
     file_list = sum(file_list, [])
     file_list.sort(key=lambda x: os.path.getmtime(x)) 
@@ -90,7 +90,7 @@ def generate_consolidated_report(output_file_path, file_list):
 
     def write_to_output(output_file_path, failcase, message, no_of_files):
 
-        def sort_fail_cases_into_desired_format(failcase, message, no_of_files):
+        def group_failcase(failcase, message, no_of_files):
 
             failcase_dict = {}
 
@@ -103,14 +103,13 @@ def generate_consolidated_report(output_file_path, file_list):
             output_list = []
             for chance in chance_list:
                 for case in sorted(failcase_dict[chance]):
-                    output_list.append(str(chance)+'\t'+str(no_of_files)+'\t'+ case +'\t'+ '\t'.join(message[case])+'\n')
+                    output_list.append(str(chance)+'\t'+str(no_of_files)+'\t'+ 
+                                       case +'\t'+ '\t'.join(message[case])+'\n')
 
             return output_list
 
-
-        output_list = sort_fail_cases_into_desired_format(failcase, message, no_of_files)
         with open(output_file_path, 'w') as output_file:
-            for output_list_item in output_list:
+            for output_list_item in group_failcase(failcase, message, no_of_files):
                     output_file.write(output_list_item)
 
 
