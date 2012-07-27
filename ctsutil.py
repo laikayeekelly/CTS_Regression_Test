@@ -14,26 +14,17 @@ def run_test(plan_name = 'CTS'):
     #subprocess.call( ["./helloworld"])
     print "finish running test"
 
-def generate_regression_plan():
+    file_list = [[os.path.join(r,files) for files in f if files.endswith(".xml")] 
+                for r,d,f in os.walk(result_folder_path)]
+    file_list = sum(file_list, [])
+    file_list.sort(key=lambda x: os.path.getmtime(x)) 
+    last_modified_file = file_list[len(file_list)-1]
 
-    def get_latest_result():
-        folder = result_folder_path
-        last_modified_file = ""
-        latest_modified_time = 0
-        for r,d,f in os.walk(folder):
-            for files in f:
-                if files.endswith(".xml"):
-                    filepath = os.path.join(r,files)
-                    modified_time = os.stat(filepath).st_mtime
-                    if modified_time > latest_modified_time:
-                        last_modified_file = filepath
-                        latest_modified_time = modified_time
+    return last_modified_file
 
-        return last_modified_file
+def cts_report_filter(report_file):
 
-
-    report_file = get_latest_result()
-    fail_found = False
+    test_plan = ''
 
     with open(regression_plan_file_path, 'w') as output:
         prev_package_name = ''
@@ -44,18 +35,18 @@ def generate_regression_plan():
         tree = etree.parse(report_file)
         find = etree.XPath("//Test[@result='fail']")
         for node in find(tree):
+            test_plan = "ctsRegression"
             while node.getparent().tag != 'TestResult':
                 node = node.getparent()
             new_package_name = node.get("appPackageName")
             if new_package_name != prev_package_name: 
                 prev_package_name = new_package_name
-                xml_text = '  <Entry uri="' + new_package_name + '"/>\n'
-                output.write(xml_text)
-                fail_found = True
+                output.write('  <Entry uri="' + new_package_name + '"/>\n')
 
         output.write('</TestPlan>\n')
 
-    return (report_file, fail_found)
+
+    return test_plan
 
 
 def generate_consolidated_report(output_file_path, file_list):
@@ -88,11 +79,11 @@ def generate_consolidated_report(output_file_path, file_list):
                 fail_message = ' '
             if key in failcase.keys():
                 failcase[key] += 1
-                if fail_message not in message[key]:
-                    message[key].append(fail_message)
             else:
                 failcase[key] = 1
-                message[key] = [fail_message]
+                message[key] = set()
+
+            message[key].add(fail_message)
 
         return (failcase, message)
 
@@ -108,17 +99,19 @@ def generate_consolidated_report(output_file_path, file_list):
                 failcase_dict[chance].append(case)
 
             chance_list = reversed(failcase_dict.keys())
-            output_list = [[str(chance)+'\t'+str(no_of_files)+'\t'+ case +'\t'+ \
-                          '\t'.join(message[case])+'\n' for case in \
-                          sorted(failcase_dict[chance])] for chance in chance_list]
+
+            output_list = []
+            for chance in chance_list:
+                for case in sorted(failcase_dict[chance]):
+                    output_list.append(str(chance)+'\t'+str(no_of_files)+'\t'+ case +'\t'+ '\t'.join(message[case])+'\n')
+
             return output_list
 
 
         output_list = sort_fail_cases_into_desired_format(failcase, message, no_of_files)
         with open(output_file_path, 'w') as output_file:
-            for chance in output_list:
-                for case in chance:
-                    output_file.write(case)
+            for output_list_item in output_list:
+                    output_file.write(output_list_item)
 
 
     print "\nGenerating Consolidated Report\n"
