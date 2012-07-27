@@ -6,11 +6,10 @@ from re import sub
 
 result_folder_path = "../repository/results" 
 regression_plan_file_path = "../repository/plan/ctsRegression.xml"
-tool_to_run_cts = "cts-tradefed"
+tool_to_run_cts = "./cts-tradefed"
 
 def run_test(plan_name = 'CTS'): 
-    #subprocess.call( [tool_to_run_cts])
-    #subprocess.call( ["run", "cts", "--plan", plan_name])
+    #subprocess.call( [tool_to_run_cts, "run", "cts", "--plan", plan_name])
     #subprocess.call( ["./helloworld"])
     print "finish running test"
 
