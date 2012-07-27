@@ -1,6 +1,7 @@
 import os
 import sys
 import subprocess
+import codecs
 from lxml import etree
 from re import sub
 
@@ -100,7 +101,7 @@ def generate_consolidated_report(output_file_path, file_list):
             key = buildkey(node)
             failedScene_node = node.find("FailedScene")
             if failedScene_node != None:
-                fail_message = sub('\r\n|\r', ' ', failedScene_node.get("message").encode('ascii', 'ignore'))
+                fail_message = sub('\r\n|\r', ' ', failedScene_node.get("message"))
                 #replace the \r\n or \r in the failure messages with a white space
             else:
                 fail_message = ' '
@@ -154,7 +155,7 @@ def generate_consolidated_report(output_file_path, file_list):
 
             return output_list
 
-        with open(output_file_path, 'w') as output_file:
+        with codecs.open(output_file_path, encoding='utf-8', mode='w') as output_file:
             for output_list_item in group_failcase(failcase, message, no_of_files):
                 output_file.write(output_list_item)
 
