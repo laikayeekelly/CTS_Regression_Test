@@ -46,7 +46,7 @@ def cts_report_filter(report_file):
             while node.getparent().tag != 'TestResult':
                 node = node.getparent()
             new_package_name = node.get("appPackageName")
-            if new_package_name != prev_package_name: 
+            if new_package_name != prev_package_name:
                 prev_package_name = new_package_name
                 output.write('  <Entry uri="' + new_package_name + '"/>\n')
 
@@ -109,6 +109,7 @@ def generate_consolidated_report(output_file_path, file_list):
             else:
                 failcase[key] = 1
                 message[key] = set()
+                #initialize the value of 'message' of a particular key to be a empty set
 
             message[key].add(fail_message)
 
