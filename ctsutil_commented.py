@@ -138,7 +138,7 @@ def generate_consolidated_report(output_file_path, file_list):
                 failcase_dict.setdefault(chance, [])
                 failcase_dict[chance].append(case)
 
-            #Test cases will the most failed chances will be printed out first
+            #Test cases with the most failed chances will be printed out first
             chance_list = reversed(failcase_dict.keys())
 
             # For every test cases, print it out in the desire format
