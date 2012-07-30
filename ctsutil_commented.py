@@ -169,4 +169,3 @@ def generate_consolidated_report(output_file_path, file_list):
         failcase, message = find_fail_case(each_file, failcase, message)
         print "Finished processing file " + each_file
     write_to_output(output_file_path, failcase, message, len(file_list))
-
