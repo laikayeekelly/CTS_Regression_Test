@@ -95,7 +95,7 @@ def consolidate_report(file_list, output_file_path):
             message[key].add(fail_message)
 
 
-    def write_to_output(output_file_path, no_of_files):
+    def write_to_output(no_of_files, output_file_path):
 
 
         def group_failcase(no_of_files):
@@ -128,4 +128,4 @@ def consolidate_report(file_list, output_file_path):
     for each_file in file_list:
         find_fail_case(each_file)
         print "Finished processing file " + each_file
-    write_to_output(output_file_path, len(file_list))
+    write_to_output(len(file_list), output_file_path)
