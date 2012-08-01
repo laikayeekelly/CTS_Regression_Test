@@ -31,6 +31,6 @@ while (regression_count < max_regression) and (plan != None):
     plan = cts_report_filter(report)
     regression_count += 1
 
-consolidate_report(sys.argv[2], report_list)
+consolidate_report(report_lis, sys.argv[2])
 
 print "Finished!!!"
