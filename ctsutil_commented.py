@@ -60,7 +60,7 @@ def cts_report_filter(report_file):
     return test_plan
 
 
-def consolidate_report(output_file_path, file_list):
+def consolidate_report(file_list, output_file_path):
     """ Generate the consolidated report of the result of the CTS tests """
 
     failcase = {}
