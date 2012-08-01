@@ -9,6 +9,8 @@ from re import sub
 result_folder_path = "../repository/results"
 regression_plan_file_path = "../repository/plan/ctsRegression.xml"
 tool_to_run_cts = "./cts-tradefed"
+regression_plan_name = "ctsRegression"
+
 
 def run_test(plan_name = 'CTS'):
     #subprocess.call( [tool_to_run_cts, "run", "cts", "--plan", plan_name])
@@ -19,13 +21,14 @@ def run_test(plan_name = 'CTS'):
                 for r,d,f in os.walk(result_folder_path)]
     file_list = sum(file_list, [])
     file_list.sort(key=lambda x: os.path.getmtime(x))
-    last_modified_file = file_list[len(file_list)-1]
+    last_modified_file = file_list[-1]
 
     return last_modified_file
 
+
 def cts_report_filter(report_file):
 
-    test_plan = ''
+    test_plan = None
 
     with open(regression_plan_file_path, 'w') as output:
         prev_package_name = ''
@@ -36,7 +39,7 @@ def cts_report_filter(report_file):
         tree = etree.parse(report_file)
         find = etree.XPath("//Test[@result='fail']")
         for node in find(tree):
-            test_plan = "ctsRegression"
+            test_plan = regression_plan_name
             while node.getparent().tag != 'TestResult':
                 node = node.getparent()
             new_package_name = node.get("appPackageName")
@@ -50,9 +53,14 @@ def cts_report_filter(report_file):
     return test_plan
 
 
-def generate_consolidated_report(output_file_path, file_list):
+def consolidate_report(file_list, output_file_path):
 
-    def find_fail_case(file, failcase, message):
+    failcase = {}
+    message = {}
+
+
+    def find_fail_case(file):
+
 
         def buildkey(node):
             key_list = []
@@ -63,8 +71,8 @@ def generate_consolidated_report(output_file_path, file_list):
             key_list.reverse()
             key = key_list[0]
             if len(key_list) >= 2:
-                key += '\t' + '.'.join(key_list[1:len(key_list)-1])
-            key += '\t' + key_list[len(key_list)-1]
+                key += '\t' + '.'.join(key_list[1:-1])
+            key += '\t' + key_list[-1]
 
             return key
 
@@ -86,12 +94,11 @@ def generate_consolidated_report(output_file_path, file_list):
 
             message[key].add(fail_message)
 
-        return (failcase, message)
+
+    def write_to_output(output_file_path, no_of_files):
 
 
-    def write_to_output(output_file_path, failcase, message, no_of_files):
-
-        def group_failcase(failcase, message, no_of_files):
+        def group_failcase(no_of_files):
 
             failcase_dict = {}
 
@@ -105,13 +112,12 @@ def generate_consolidated_report(output_file_path, file_list):
             for chance in chance_list:
                 for case in sorted(failcase_dict[chance]):
                     output_list.append(str(chance)+'\t'+str(no_of_files)+'\t'+ 
-                                       case +'\t'+ '\t'.join(message[case])+'\n')
+                                       case +'\t'+ '\t'.join(message[case]))
 
             return output_list
 
         with codecs.open(output_file_path, encoding='utf-8', mode='w') as output_file:
-            for output_list_item in group_failcase(failcase, message, no_of_files):
-                output_file.write(output_list_item)
+            output_file.write('\n'.join(group_failcase(no_of_files)))  
 
 
     print "\nGenerating Consolidated Report\n"
@@ -120,7 +126,6 @@ def generate_consolidated_report(output_file_path, file_list):
     message = {}
 
     for each_file in file_list:
-        failcase, message = find_fail_case(each_file, failcase, message)
+        find_fail_case(each_file)
         print "Finished processing file " + each_file
-    write_to_output(output_file_path, failcase, message, len(file_list))
-
+    write_to_output(output_file_path, len(file_list))
