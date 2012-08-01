@@ -8,6 +8,8 @@ from re import sub
 result_folder_path = "../repository/results"
 regression_plan_file_path = "../repository/plan/ctsRegression.xml"
 tool_to_run_cts = "./cts-tradefed"
+regression_plan_name = "ctsRegression"
+
 
 def run_test(plan_name = 'CTS'):
     """ Run the CTS or CTS regression test
@@ -22,17 +24,18 @@ def run_test(plan_name = 'CTS'):
     # Get all the test result report and store it in the list file_list
     file_list = sum(file_list, [])
     # Convert the type of file_list from list of lists to list
-    file_list.sort(key=lambda x: os.path.getmtime(x))
+    file_list.sort(key=lambda x: os.path.getmtime(x))  # --> take first item in file_list if reverse used
     # Sort file_list according to the modidication date of file
-    last_modified_file = file_list[len(file_list)-1]
+    last_modified_file = file_list[-1]
 
     return last_modified_file
+
 
 def cts_report_filter(report_file):
     """ Create a regression test plan based on the latest test done
         Return the test plan name """
 
-    test_plan = ''
+    test_plan = None 
 
     with open(regression_plan_file_path, 'w') as output:
         prev_package_name = ''
@@ -43,7 +46,7 @@ def cts_report_filter(report_file):
         tree = etree.parse(report_file)
         find = etree.XPath("//Test[@result='fail']")
         for node in find(tree):
-            test_plan = "ctsRegression"
+            test_plan = regression_plan_name
             while node.getparent().tag != 'TestResult':
                 node = node.getparent()
             new_package_name = node.get("appPackageName")
@@ -58,11 +61,13 @@ def cts_report_filter(report_file):
 
 
 def generate_consolidated_report(output_file_path, file_list):
-
     """ Generate the consolidated report of the result of the CTS tests """
 
-    def find_fail_case(file, failcase, message):
+    failcase = {}
+    message = {}
 
+
+    def find_fail_case(file):
         """
         Find out all the fail test cases and the corresponding error messages
         and update the variable failcase and message
@@ -74,6 +79,7 @@ def generate_consolidated_report(output_file_path, file_list):
                   value -> list of failure messages for the same failed 
                            test case
         """
+
 
         def buildkey(node):
             """generate the key for updating variables failcase and message """
@@ -87,9 +93,9 @@ def generate_consolidated_report(output_file_path, file_list):
             key_list.reverse()
             key = key_list[0]
             if len(key_list) >= 2:
-                key += '\t' + '.'.join(key_list[1:len(key_list)-1])
+                key += '\t' + '.'.join(key_list[1:-1])
             # combine the test suite name together with the notation '.'
-            key += '\t' + key_list[len(key_list)-1]
+            key += '\t' + key_list[-1]
 
             return key
 
@@ -114,14 +120,12 @@ def generate_consolidated_report(output_file_path, file_list):
 
             message[key].add(fail_message)
 
-        return (failcase, message)
 
-
-    def write_to_output(output_file_path, failcase, message, no_of_files):
+    def write_to_output(output_file_path, no_of_files):
         """Write the report into the csv file defined by user"""
 
-        def group_failcase(failcase, message, no_of_files):
 
+        def group_failcase(no_of_files):
             """ 
             Categorize the failed test cases  into a dictionary according 
             to their fail chance and sort the test cases in an 
@@ -141,31 +145,23 @@ def generate_consolidated_report(output_file_path, file_list):
             #Test cases with the most failed chances will be printed out first
             chance_list = reversed(failcase_dict.keys())
 
-            # For every test cases, print it out in the desire format
-            # Testcases with same failed chances will be put into the same list
-            # And all these lists will be put into a list variable output_list
-            # So, output_list is a variable of type list of lists
-            # (List Comprehesion is being used below)
+            # For every test cases, convert it to the desire format
+            # and append it into variable output_list
 
             output_list = []
             for chance in chance_list:
                 for case in sorted(failcase_dict[chance]):
                     output_list.append(str(chance)+'\t'+str(no_of_files)+'\t'+ 
-                                       case +'\t'+ '\t'.join(message[case])+'\n')
+                                       case +'\t'+ '\t'.join(message[case]))
 
             return output_list
 
         with codecs.open(output_file_path, encoding='utf-8', mode='w') as output_file:
-            for output_list_item in group_failcase(failcase, message, no_of_files):
-                output_file.write(output_list_item)
-
+            output_file.write('\n'.join(group_failcase(no_of_files)))  
 
     print "\nGenerating Consolidated Report\n"
 
-    failcase = {}
-    message = {}
-
     for each_file in file_list:
-        failcase, message = find_fail_case(each_file, failcase, message)
+        find_fail_case(each_file)
         print "Finished processing file " + each_file
-    write_to_output(output_file_path, failcase, message, len(file_list))
+    write_to_output(output_file_path, len(file_list))
