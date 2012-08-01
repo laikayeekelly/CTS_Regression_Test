@@ -28,6 +28,7 @@ def run_test(plan_name = 'CTS'):
 
 def cts_report_filter(report_file):
 
+
     test_plan = None
 
     with open(regression_plan_file_path, 'w') as output:
@@ -54,9 +55,6 @@ def cts_report_filter(report_file):
 
 
 def consolidate_report(file_list, output_file_path):
-
-    failcase = {}
-    message = {}
 
 
     def find_fail_case(file):
