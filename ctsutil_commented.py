@@ -63,10 +63,6 @@ def cts_report_filter(report_file):
 def consolidate_report(file_list, output_file_path):
     """ Generate the consolidated report of the result of the CTS tests """
 
-    failcase = {}
-    message = {}
-
-
     def find_fail_case(file):
         """
         Find out all the fail test cases and the corresponding error messages
@@ -157,7 +153,11 @@ def consolidate_report(file_list, output_file_path):
             return output_list
 
         with codecs.open(output_file_path, encoding='utf-8', mode='w') as output_file:
-            output_file.write('\n'.join(group_failcase(no_of_files)))  
+            output_file.write('\n'.join(group_failcase(no_of_files)))
+
+
+    failcase = {}
+    message = {}
 
     print "\nGenerating Consolidated Report\n"
 
