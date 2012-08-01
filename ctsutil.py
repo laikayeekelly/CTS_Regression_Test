@@ -29,7 +29,7 @@ def run_test(plan_name = 'CTS'):
 def cts_report_filter(report_file):
 
 
-    test_plan = None
+    plan = None
 
     with open(regression_plan_file_path, 'w') as output:
         prev_package_name = ''
@@ -40,7 +40,7 @@ def cts_report_filter(report_file):
         tree = etree.parse(report_file)
         find = etree.XPath("//Test[@result='fail']")
         for node in find(tree):
-            test_plan = regression_plan_name
+            plan = regression_plan_name
             while node.getparent().tag != 'TestResult':
                 node = node.getparent()
             new_package_name = node.get("appPackageName")
@@ -51,7 +51,7 @@ def cts_report_filter(report_file):
         output.write('</TestPlan>\n')
 
 
-    return test_plan
+    return plan
 
 
 def consolidate_report(file_list, output_file_path):
