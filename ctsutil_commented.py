@@ -24,7 +24,7 @@ def run_test(plan_name = 'CTS'):
     # Get all the test result report and store it in the list file_list
     file_list = sum(file_list, [])
     # Convert the type of file_list from list of lists to list
-    file_list.sort(key=lambda x: os.path.getmtime(x))  # --> take first item in file_list if reverse used
+    file_list.sort(key=lambda x: os.path.getmtime(x))
     # Sort file_list according to the modidication date of file
     last_modified_file = file_list[-1]
 
@@ -60,7 +60,7 @@ def cts_report_filter(report_file):
     return test_plan
 
 
-def generate_consolidated_report(output_file_path, file_list):
+def consolidate_report(output_file_path, file_list):
     """ Generate the consolidated report of the result of the CTS tests """
 
     failcase = {}
