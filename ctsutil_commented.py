@@ -19,7 +19,8 @@ def run_test(plan_name = 'CTS'):
     #subprocess.call( ["./helloworld"])
     print "finish running test"
 
-    file_list = [[os.path.join(r,files) for files in f if files.endswith(".xml")]
+    file_list = [[os.path.join(r,files) for files in f 
+                if files.endswith(".xml")]
                 for r,d,f in os.walk(result_folder_path)]
     # Get all the test result report and store it in the list file_list
     file_list = sum(file_list, [])
@@ -103,7 +104,8 @@ def consolidate_report(file_list, output_file_path):
             key = buildkey(node)
             failedScene_node = node.find("FailedScene")
             if failedScene_node != None:
-                fail_message = sub('\r\n|\r', ' ', failedScene_node.get("message"))
+                fail_message = sub('\r\n|\r', ' ', 
+                                    failedScene_node.get("message"))
                 #replace the \r\n or \r in the failure messages with a white space
             else:
                 fail_message = ' '
@@ -152,8 +154,8 @@ def consolidate_report(file_list, output_file_path):
 
             return output_list
 
-        with codecs.open(output_file_path, encoding='utf-8', mode='w') as output_file:
-            output_file.write('\n'.join(group_failcase(no_of_files)))
+        with codecs.open(output_file_path, encoding='utf-8', mode='w') as f:
+            f.write('\n'.join(group_failcase(no_of_files)))
 
 
     failcase = {}
