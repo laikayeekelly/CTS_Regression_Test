@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import codecs
+import time
 from lxml import etree
 from re import sub
 
