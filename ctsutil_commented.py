@@ -2,21 +2,25 @@ import os
 import sys
 import subprocess
 import codecs
+import time
 from lxml import etree
 from re import sub
 
 result_folder_path = "../repository/results"
-regression_plan_file_path = "../repository/plan/ctsRegression.xml"
+regression_plan_file_path = "../repository/plans/ctsRegression.xml"
 tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
-
+sec_for_test_finish = 6*60*60
 
 def run_test(plan_name = 'CTS'):
     """ Run the CTS or CTS regression test
         Return the path of the test result report """
 
-    #subprocess.call( [tool_to_run_cts, "run", "cts", "--plan", plan_name])
-    #subprocess.call( ["./helloworld"])
+    process = subprocess.Popen(tool_to_run_cts + " run cts --plan " + plan_name, 
+                             shell = True)
+    time.sleep(sec_for_test_finish)
+    subprocess.Popen.kill(process)
+
     print "finish running test"
 
     file_list = [[os.path.join(r,files) for files in f 
