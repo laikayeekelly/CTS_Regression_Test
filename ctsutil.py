@@ -8,7 +8,7 @@ from re import sub
 
 
 result_folder_path = "../repository/results"
-regression_plan_file_path = "../repository/plan/ctsRegression.xml"
+regression_plan_file_path = "../repository/plans/ctsRegression.xml"
 tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
 sec_for_test_finish = 6*60*60
