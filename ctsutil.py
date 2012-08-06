@@ -12,19 +12,21 @@ regression_plan_file_path = "../repository/plans/ctsRegression.xml"
 tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
 
-def get_report_created():
-
-    file_list = [[os.path.join(r,files) for files in f 
-                if files.endswith(".xml")]
-                for r,d,f in os.walk(result_folder_path)]
-    file_list = sum(file_list, [])
-    file_list.sort(key=lambda x: os.path.getmtime(x))
-    last_modified_file = file_list[-1]
-
-    return last_modified_file
-
 
 def run_test(plan_name = 'CTS'):
+
+
+    def get_report_created():
+
+        file_list = [[os.path.join(r,files) for files in f 
+                    if files.endswith(".xml")]
+                    for r,d,f in os.walk(result_folder_path)]
+        file_list = sum(file_list, [])
+        file_list.sort(key=lambda x: os.path.getmtime(x))
+        last_modified_file = file_list[-1]
+
+        return last_modified_file
+
 
     prev_report = get_report_created()
     process = subprocess.Popen(tool_to_run_cts + " run cts --plan " + plan_name, 
