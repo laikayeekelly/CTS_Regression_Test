@@ -38,7 +38,6 @@ def run_test(plan_name = 'CTS'):
             subprocess.Popen.kill(process)
             break
 
-    print "finish running test"
     last_modified_file = get_report_created()
 
     return last_modified_file
