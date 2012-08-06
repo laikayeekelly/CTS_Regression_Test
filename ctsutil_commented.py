@@ -43,11 +43,10 @@ def run_test(plan_name = 'CTS'):
     while prev_report == get_report_created():
         time.sleep(1) 
         # sleep the current process unless new report file is created
-        if prev_report != get_report_created():
-            # if new report file is created meaning that the CTS test has 
-            # finished, the process for running the CTS test is being killed
-            subprocess.Popen.kill(process)
-            break
+
+    # if new report file is created meaning that the CTS test has 
+    # finished, the process for running the CTS test is being killed
+    subprocess.Popen.kill(process)
 
     last_modified_file = get_report_created()
 
