@@ -34,9 +34,8 @@ def run_test(plan_name = 'CTS'):
 
     while prev_report == get_report_created() :
         time.sleep(1)
-        if prev_report != get_report_created():   
-            subprocess.Popen.kill(process)
-            break
+
+    subprocess.Popen.kill(process)
 
     last_modified_file = get_report_created()
 
