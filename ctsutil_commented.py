@@ -6,32 +6,51 @@ import time
 from lxml import etree
 from re import sub
 
+
 result_folder_path = "../repository/results"
 regression_plan_file_path = "../repository/plans/ctsRegression.xml"
 tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
-sec_for_test_finish = 6*60*60
+
 
 def run_test(plan_name = 'CTS'):
     """ Run the CTS or CTS regression test
         Return the path of the test result report """
 
+
+    def get_report_created():
+        """ Read through all the files in the folder for storing  the CTS report and
+            return the path of the lastest modified file """
+
+        file_list = [[os.path.join(r,files) for files in f 
+                    if files.endswith(".xml")]
+                    for r,d,f in os.walk(result_folder_path)]
+        # Get all the test result report and store it in the list file_list
+        file_list = sum(file_list, [])
+        # Convert the type of file_list from list of lists to list
+        file_list.sort(key=lambda x: os.path.getmtime(x))
+        # Sort file_list according to the modidication date of file
+        last_modified_file = file_list[-1]
+
+        return last_modified_file
+
+
+    prev_report = get_report_created()
     process = subprocess.Popen(tool_to_run_cts + " run cts --plan " + plan_name, 
-                             shell = True)
-    time.sleep(sec_for_test_finish)
-    subprocess.Popen.kill(process)
+                               shell = True)
+    # A process is create to execute the CTS test according to the test plan
+    # stored in the variable plan_name
+    while prev_report == get_report_created():
+        time.sleep(1) 
+        # sleep the current process unless new report file is created
+        if prev_report != get_report_created():
+            # if new report file is created meaning that the CTS test has 
+            # finished, the process for running the CTS test is being killed
+            subprocess.Popen.kill(process)
+            break
 
     print "finish running test"
-
-    file_list = [[os.path.join(r,files) for files in f 
-                if files.endswith(".xml")]
-                for r,d,f in os.walk(result_folder_path)]
-    # Get all the test result report and store it in the list file_list
-    file_list = sum(file_list, [])
-    # Convert the type of file_list from list of lists to list
-    file_list.sort(key=lambda x: os.path.getmtime(x))
-    # Sort file_list according to the modidication date of file
-    last_modified_file = file_list[-1]
+    last_modified_file = get_report_created()
 
     return last_modified_file
 
