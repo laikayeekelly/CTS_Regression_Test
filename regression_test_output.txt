@@ -1,45 +1,78 @@
-finished generating regression test plan
-run regression test
+08-06 13:47:00 I/DeviceManager: Detected new device PHILIPS W732
+Android CTS 4.0.3_r3
+Running indefinitely in non-interactive mode.
+Using commandline arguments as starting command: [run, cts, --plan, YTS]
+08-06 13:47:00 I/TestInvocation: Starting invocation for 'cts' on build '4.0.3_r3' on device PHILIPS W732
+08-06 13:47:00 I/PHILIPS W732: Created result dir 2012.08.06_13.47.00
+08-06 13:47:20 I/PHILIPS W732: Collecting device info
+08-06 13:47:21 I/PHILIPS W732: -----------------------------------------
+08-06 13:47:21 I/PHILIPS W732: Test package android.textureview started
+08-06 13:47:21 I/PHILIPS W732: -----------------------------------------
+08-06 13:47:24 I/PHILIPS W732: android.textureview.cts.TextureViewSnapshotTest#testTextureViewGrabSnapshot FAIL 
+junit.framework.AssertionFailedError: Did not complete complete test.
+at android.textureview.cts.TextureViewSnapshotTest.testTextureViewGrabSnapshot(TextureViewSnapshotTest.java:30)
+at java.lang.reflect.Method.invokeNative(Native Method)
+at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
+at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
+at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:186)
+at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:169)
+at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:154)
+at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:537)
+at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1557)
 
-finished generating regression test plan
-run regression test
+08-06 13:47:28 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress200Hz PASS 
+08-06 13:47:41 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress48Hz PASS 
+08-06 13:47:51 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress60Hz PASS 
+08-06 13:48:00 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress70Hz PASS 
+08-06 13:48:12 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewWithUploads30Hz PASS 
+08-06 13:48:22 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewWithoutUploads60Hz PASS 
+08-06 13:48:27 I/PHILIPS W732: Saved log device_logcat_1479713621699335850.zip
+08-06 13:48:28 I/PHILIPS W732: Saved log host_log_1017052985672975539.zip
+08-06 13:48:28 I/PHILIPS W732: android.textureview package complete: Passed 6, Failed 1, Not Executed 0
+08-06 13:48:28 I/PHILIPS W732: Created xml report file at file:///home/philips-06/cts/android-cts/tools/./../../android-cts/repository/results/2012.08.06_13.47.00/testResult.xml
+08-06 13:48:28 I/PHILIPS W732: XML test result file generated at 2012.08.06_13.47.00. Passed 6, Failed 1, Not Executed 0
+08-06 13:48:28 I/PHILIPS W732: Time: 1m 27s
+08-06 13:48:28 I/DeviceManager: Detected new device PHILIPS W732
+Android CTS 4.0.3_r3
+Running indefinitely in non-interactive mode.
+Using commandline arguments as starting command: [run, cts, --plan, ctsRegression]
+08-06 13:48:29 I/TestInvocation: Starting invocation for 'cts' on build '4.0.3_r3' on device PHILIPS W732
+08-06 13:48:29 I/PHILIPS W732: Created result dir 2012.08.06_13.48.29
+08-06 13:48:48 I/PHILIPS W732: Collecting device info
+08-06 13:48:49 I/PHILIPS W732: -----------------------------------------
+08-06 13:48:49 I/PHILIPS W732: Test package android.textureview started
+08-06 13:48:49 I/PHILIPS W732: -----------------------------------------
+08-06 13:48:52 I/PHILIPS W732: android.textureview.cts.TextureViewSnapshotTest#testTextureViewGrabSnapshot FAIL 
+junit.framework.AssertionFailedError: Did not complete complete test.
+at android.textureview.cts.TextureViewSnapshotTest.testTextureViewGrabSnapshot(TextureViewSnapshotTest.java:30)
+at java.lang.reflect.Method.invokeNative(Native Method)
+at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
+at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
+at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:186)
+at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:169)
+at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:154)
+at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:537)
+at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1557)
 
-finished generating regression test plan
-run regression test
+08-06 13:48:56 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress200Hz PASS 
+08-06 13:49:08 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress48Hz PASS 
+08-06 13:49:18 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress60Hz PASS 
+08-06 13:49:27 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewStress70Hz PASS 
+08-06 13:49:39 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewWithUploads30Hz PASS 
+08-06 13:49:50 I/PHILIPS W732: android.textureview.cts.TextureViewTest#testTextureViewWithoutUploads60Hz PASS 
+08-06 13:49:55 I/PHILIPS W732: Saved log device_logcat_658527886293609134.zip
+08-06 13:49:55 I/PHILIPS W732: Saved log host_log_1498203371614387060.zip
+08-06 13:49:55 I/PHILIPS W732: android.textureview package complete: Passed 6, Failed 1, Not Executed 0
+08-06 13:49:55 I/PHILIPS W732: Created xml report file at file:///home/philips-06/cts/android-cts/tools/./../../android-cts/repository/results/2012.08.06_13.48.29/testResult.xml
+08-06 13:49:55 I/PHILIPS W732: XML test result file generated at 2012.08.06_13.48.29. Passed 6, Failed 1, Not Executed 0
+08-06 13:49:55 I/PHILIPS W732: Time: 1m 26s
+finish running test
+Finished generating regression test plan and start running regression test
 
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
-run regression test
-
-finished generating regression test plan
+finish running test
 
 Generating Consolidated Report
 
-Finished processing file ../repository/result\2012.06.25_11.23.18\testResult.xml
-Finished processing file ../repository/result\2012.06.26_11.37.01\testResult.xml
-Finished processing file ../repository/result\2012.06.26_18.00.04\testResult.xml
-Finished processing file ../repository/result\2012.06.27_11.14.07\testResult.xml
-Finished processing file ../repository/result\2012.06.28_11.55.56\testResult.xml
-Finished processing file ../repository/result\2012.06.28_17.36.57\testResult.xml
-Finished processing file ../repository/result\2012.06.28_17.45.21\testResult.xml
-Finished processing file ../repository/result\2012.06.29_11.06.25\testResult.xml
-Finished processing file ../repository/result\2012.06.29_11.13.46\testResult.xml
-Finished processing file ../repository/result\2012.06.29_18.05.04\testResult.xml
+Finished processing file ../repository/results/2012.08.06_13.47.00/testResult.xml
+Finished processing file ../repository/results/2012.08.06_13.48.29/testResult.xml
 Finished!!!
