@@ -20,7 +20,6 @@ report = run_test()
 report_list.append(report)
 plan = cts_report_filter(report)
 while (regression_count < max_regression) and (plan != None):
-    print 'Finished generating regression test plan and start running regression test\n'
     report = run_test(plan) 
     report_list.append(report)
     plan = cts_report_filter(report)
