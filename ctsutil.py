@@ -13,7 +13,7 @@ tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
 
 
-def run_test(plan_name = 'CTS'):
+def run_test(plan_name = 'TTS'):
 
 
     def get_report_created():
@@ -30,12 +30,13 @@ def run_test(plan_name = 'CTS'):
 
     prev_report = get_report_created()
     process = subprocess.Popen(tool_to_run_cts + " run cts --plan " + plan_name, 
-                               shell = True)
+                               shell = True, stdout=subprocess.PIPE)
 
-    while prev_report == get_report_created() :
-        time.sleep(1)
-
-    subprocess.Popen.kill(process)
+    for line in iter(process.stdout.readline, ''):
+        print line.rstrip()
+        if "Time:" in line:
+            subprocess.Popen.kill(process)
+            break
 
     last_modified_file = get_report_created()
 
@@ -110,7 +111,7 @@ def consolidate_report(file_list, output_file_path):
             message[key].add(fail_message)
 
 
-    def write_to_output(no_of_files, output_file_path):
+    def write_to_output(file_list, output_file_path):
 
 
         def group_failcase(no_of_files):
@@ -131,8 +132,44 @@ def consolidate_report(file_list, output_file_path):
 
             return output_list
 
+
+        tree = etree.parse(file_list[0])
+        build_info = etree.XPath("//BuildInfo")(tree)[0]
+        build_model = build_info.get("build_model")
+        build_name = build_info.get("buildName")
+        build_brand = build_info.get("build_brand")
+        build_manufacturer = build_info.get("build_manufacturer")
+        device_id = build_info.get("deviceID")
+        firmware_version = build_info.get("buildVersion")
+        firmware_build = build_info.get("buildID")
+        build_fingerprint = build_info.get("build_fingerprint")
+        CTS_version = etree.XPath("//Cts")(tree)[0].get("version")
+        result_info = etree.XPath("//Summary")(tree)[0]
+        test_failed = result_info.get("failed")
+        test_timed_out = result_info.get("timeout")
+        test_not_execute = result_info.get("notExecuted")
+
+
         with codecs.open(output_file_path, encoding='utf-8', mode='w') as f:
-            f.write('\n'.join(group_failcase(no_of_files)))  
+
+            f.write("Build Model" + '\t' + build_model + '\n')
+            f.write("Build Name" + '\t' + build_name + '\n' )
+            f.write("Build Brand" + '\t' + build_brand + '\n' )
+            f.write("Build Manufacturer" + '\t' + build_manufacturer + '\n' )
+            f.write("Device ID" + '\t' + device_id + '\n' )
+            f.write("Firmware Version" + '\t' + firmware_version + '\n' )
+            f.write("Firmware Build Number" + '\t' + firmware_build + '\n' )
+            f.write("Build Fingerprint" + '\t' + build_fingerprint + '\n' )
+            f.write("CTS Version" + '\t' + CTS_version + '\n' )
+            f.write("Test Failed" + '\t' + test_failed + '\n' )
+            f.write("Test Timed out" + '\t' + test_timed_out + '\n' )
+            f.write("Test Not Executed" + '\t' + test_not_execute + '\n' )
+            f.write("Test Report"+'\n')
+            f.write('\n'.join(file_list) + '\n')
+            f.write("Chance"+'\t'+"Total"+'\t'+"Test Package"
+                    +'\t'+"Test Suite"+'\t'+"Test Case"+'\t'+"Error Message"+'\n')
+
+            f.write('\n'.join(group_failcase(len(file_list))))  
 
 
     print "\nGenerating Consolidated Report\n"
@@ -143,4 +180,4 @@ def consolidate_report(file_list, output_file_path):
     for each_file in file_list:
         find_fail_case(each_file)
         print "Finished processing file " + each_file
-    write_to_output(len(file_list), output_file_path)
+    write_to_output(file_list, output_file_path)
