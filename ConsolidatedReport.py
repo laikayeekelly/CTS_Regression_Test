@@ -17,7 +17,7 @@ file_list = ReportLib.list_files(sys.argv[1])
 for each_file in file_list:
     failcase, message = ReportLib.find_fail_case(each_file, failcase, message)
     print "Finished processing file " + each_file
-ReportLib.write_to_output(sys.argv[2], failcase, message, len(file_list))
+ReportLib.write_to_output(file_list, failcase, message, sys.argv[2])
 
 print "Finished!!!"
 
