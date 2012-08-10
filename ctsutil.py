@@ -122,7 +122,7 @@ def consolidate_report(file_list, output_file_path):
                 failcase_dict.setdefault(chance, [])
                 failcase_dict[chance].append(case)
 
-            chance_list = reversed(sorted(ailcase_dict.keys()))
+            chance_list = reversed(sorted(failcase_dict.keys()))
 
             output_list = []
             for chance in chance_list:
