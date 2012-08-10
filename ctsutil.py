@@ -13,7 +13,7 @@ tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
 
 
-def run_test(plan_name = 'RTS'):
+def run_test(plan_name = 'CTS'):
 
 
     def get_report_created():
