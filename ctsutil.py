@@ -13,7 +13,7 @@ tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
 
 
-def run_test(plan_name = 'CTS'):
+def run_test(plan_name = 'RTS'):
 
 
     def get_report_created():
@@ -40,7 +40,32 @@ def run_test(plan_name = 'CTS'):
 
     last_modified_file = get_report_created()
 
-    return last_modified_file
+    tree = etree.parse(last_modified_file)
+    test_not_execute = etree.XPath("//Summary")(tree)[0].get("notExecuted")
+    if int(test_not_execute) != 0:
+        complete_execute = False
+    else:
+        complete_execute = True
+
+    return (last_modified_file, complete_execute) 
+
+def check_adb_connection():
+
+    no_of_device = 0
+    check_list_devices = False 
+    process = subprocess.Popen("adb devices", shell=True, stdout=subprocess.PIPE)
+    for line in iter(process.stdout.readline, ''):
+        print line.rstrip()
+        if "List" in line:
+            check_list_devices = True
+        if check_list_devices == True:
+            no_of_device += 1
+    
+    no_of_device = no_of_device - 2
+    if no_of_device != 0 :
+        print "Test cannot be completely executed"
+    else:
+        print "Test cannot be completely executed and device disconnected!"
 
 
 def cts_report_filter(report_file):
