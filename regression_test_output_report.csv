@@ -1,1 +1,18 @@
-3	3	android.textureview	android.textureview.cts.TextureViewSnapshotTest	testTextureViewGrabSnapshot	junit.framework.AssertionFailedError: Did not complete complete test. at android.textureview.cts.TextureViewSnapshotTest.testTextureViewGrabSnapshot(TextureViewSnapshotTest.java:30) 
+Build Model,W732,,,,
+Build Name,w732_ics,,,,
+Build Brand,Philips,,,,
+Build Manufacturer,Philips,,,,
+Device ID,0123456789ABCDEF,,,,
+Firmware Version,4.0.3,,,,
+Firmware Build Number,IML74K,,,,
+Build Fingerprint,Philips/w732_ics/Philips_W732_A:4.0.3/IML74K/1339744354:user/release-keys,,,,
+CTS Version,4.0.3_r3,,,,
+Test Failed,2,,,,
+Test Timed out,0,,,,
+Test Not Executed,0,,,,
+Test Report,,,,,
+../repository/results/2012.08.08_12.28.59/testResult.xml,,,,,
+../repository/results/2012.08.08_12.30.02/testResult.xml,,,,,
+Chance,Total,Test Package,Test Suite,Test Case,Failure Details
+2,2,android.security,android.security.cts.BrowserTest,testBrowserPrivateDataAccess,junit.framework.AssertionFailedError: Failed preventing access to private data at android.security.cts.BrowserTest.testBrowserPrivateDataAccess(BrowserTest.java:195) 
+2,2,android.security,android.security.cts.PackageSignatureTest,testPackageSignatures,junit.framework.AssertionFailedError: These packages should not be signed with a well known key: [com.example.android.apis
