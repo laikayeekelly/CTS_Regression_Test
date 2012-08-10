@@ -13,7 +13,7 @@ tool_to_run_cts = "./cts-tradefed"
 regression_plan_name = "ctsRegression"
 
 
-def run_test(plan_name = 'TTS'):
+def run_test(plan_name = 'CTS'):
 
 
     def get_report_created():
@@ -98,7 +98,7 @@ def consolidate_report(file_list, output_file_path):
             key = buildkey(node)
             failedScene_node = node.find("FailedScene")
             if failedScene_node != None:
-                fail_message = sub('\r\n|\r', ' ', 
+                fail_message = sub('\r\n|\r|\n', ' ', 
                                    failedScene_node.get("message"))
             else:
                 fail_message = ' '
@@ -122,7 +122,7 @@ def consolidate_report(file_list, output_file_path):
                 failcase_dict.setdefault(chance, [])
                 failcase_dict[chance].append(case)
 
-            chance_list = reversed(failcase_dict.keys())
+            chance_list = reversed(sorted(ailcase_dict.keys()))
 
             output_list = []
             for chance in chance_list:
