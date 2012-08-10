@@ -39,7 +39,7 @@ def find_fail_case(file, failcase, message):
         key = buildkey(node)
         failedScene_node = node.find("FailedScene")
         if failedScene_node != None:
-            fail_message = sub('\r\n|\r', ' ', 
+            fail_message = sub('\r\n|\r|\n', ' ', 
                                failedScene_node.get("message"))
         else:
             fail_message = ' '
@@ -64,7 +64,7 @@ def write_to_output(file_list, failcase, message, output_file_path):
             failcase_dict.setdefault(chance, [])
             failcase_dict[chance].append(case)
 
-        chance_list = reversed(failcase_dict.keys())
+        chance_list = reversed(sorted(failcase_dict.keys()))
 
         output_list = []
         for chance in chance_list:
@@ -103,9 +103,9 @@ def write_to_output(file_list, failcase, message, output_file_path):
         f.write("Firmware Build Number" + '\t' + firmware_build + '\n' )
         f.write("Build Fingerprint" + '\t' + build_fingerprint + '\n' )
         f.write("CTS Version" + '\t' + CTS_version + '\n' )
-        f.write("Test Failed" + '\t' + test_failed + '\n' )
-        f.write("Test Timed out" + '\t' + test_timed_out + '\n' )
-        f.write("Test Not Executed" + '\t' + test_not_execute + '\n' )
+        #f.write("Test Failed" + '\t' + test_failed + '\n' )
+        #f.write("Test Timed out" + '\t' + test_timed_out + '\n' )
+        #f.write("Test Not Executed" + '\t' + test_not_execute + '\n' )
         f.write("Test Report"+'\n')
         f.write('\n'.join(file_list) + '\n')
         f.write("Chance"+'\t'+"Total"+'\t'+"Test Package"
