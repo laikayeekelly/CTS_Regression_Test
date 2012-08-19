@@ -7,6 +7,10 @@ from lxml import etree
 
 
 def list_files(folder):
+    """This function is used to list all the xml documents in the folder 
+        requested by user and store all file names in to a list variable 
+        called file_list"""
+
     file_list = []
     for r,d,f in os.walk(folder):
         for files in f:
@@ -16,24 +20,34 @@ def list_files(folder):
 
 
 def find_fail_case(file, failcase, message):
-
+    """This function is used to find out all the nodes of the fail test case
+        and update the variable failcase and message"""
 
     def buildkey(node):
         key_list = []
         while node.getparent().tag != 'TestResult':
+            # get the name of the test case and test suite
             key_list.append(node.get("name"))
             node = node.getparent()
-        key_list.append(node.get("appPackageName"))
+        key_list.append(node.get("appPackageName"))  # get the name of the test package
         key_list.reverse()
         key = key_list[0]
         if len(key_list) >= 2:
             key += '\t' + '.'.join(key_list[1:-1])
+        # combine the test suite name together with the notation '.'
         key += '\t' + key_list[-1]
 
         return key
 
+    # both failcase and message are variables of type dictionary
+    # failcase: key -> name of fail cases  value -> number of failed chances
+    # message : key -> name of fail cases
+    #           value -> list of failure messages for the same failed test case
+
+    # generate the key for updating the variables failcase and message
 
     tree = etree.parse(file)
+    #find out all the nodes of the fail test case 
     find = etree.XPath("//Test[@result='fail']")
     for node in find(tree):
         key = buildkey(node)
@@ -41,6 +55,7 @@ def find_fail_case(file, failcase, message):
         if failedScene_node != None:
             fail_message = sub('\r\n|\r|\n', ' ', 
                                failedScene_node.get("message"))
+            #replace the \r\n or \r in the failure messages with a white space
         else:
             fail_message = ' '
         if key in failcase.keys():
@@ -53,7 +68,10 @@ def find_fail_case(file, failcase, message):
 
     return (failcase, message)
 
+
 def write_to_output(file_list, failcase, message, output_file_path):
+    """ Categorize the failed test cases into a dictionary according to their 
+    fail chance and sort the test cases in an alphabetical way """
 
 
     def group_failcase(no_of_files, failcase, message):
@@ -64,6 +82,10 @@ def write_to_output(file_list, failcase, message, output_file_path):
             failcase_dict.setdefault(chance, [])
             failcase_dict[chance].append(case)
 
+        # failcase_dict is a variable of type dictionary
+        # failcase_dict : key -> failed chances   value : list of fail case name
+
+        #Test cases will the most failed chances will be printed out first
         chance_list = reversed(sorted(failcase_dict.keys()))
 
         output_list = []
@@ -91,7 +113,7 @@ def write_to_output(file_list, failcase, message, output_file_path):
     test_timed_out = result_info.get("timeout")
     test_not_execute = result_info.get("notExecuted")
 
-
+    # Output the report as an csv document with file name defined by user
     with codecs.open(output_file_path, encoding='utf-8', mode='w') as f:
 
         f.write("Build Model" + '\t' + build_model + '\n')
